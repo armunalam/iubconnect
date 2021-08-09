@@ -29,6 +29,19 @@ class Account(models.Model):
         return str(self.user)
 
 
+class Connection(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    connected_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='connected_user')
+    STATUS_OPTIONS = (
+        ('p', 'Pending'),
+        ('c', 'Connected'),
+    )
+    status = models.CharField(max_length=1, choices=STATUS_OPTIONS)
+
+    class Meta:
+        unique_together = ('user', 'connected_user')
+    
+
 class Alumnus(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     year_enrolled = models.DateField()
