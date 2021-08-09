@@ -24,14 +24,16 @@ class Account(models.Model):
     phone = models.CharField(max_length=15)
     address = models.CharField(max_length=30)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
-    
+
     def __str__(self):
         return str(self.user)
 
 
 class Connection(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
-    connected_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='connected_user')
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='user')
+    connected_user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='connected_user')
     STATUS_OPTIONS = (
         ('p', 'Pending'),
         ('c', 'Connected'),
@@ -40,7 +42,7 @@ class Connection(models.Model):
 
     class Meta:
         unique_together = ('user', 'connected_user')
-    
+
 
 class Alumnus(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
