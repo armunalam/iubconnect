@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import Box from './components/Box'
-import GridBox from './components/GridBox'
+import Box from '../components/Box'
+import GridBox from '../components/GridBox'
 import { IoMdSchool } from 'react-icons/io'
 import { GoCalendar } from 'react-icons/go'
 import { BsPen } from 'react-icons/bs'
