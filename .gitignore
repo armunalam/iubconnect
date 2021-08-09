@@ -1,4 +1,6 @@
 iubconnect/__pycache__
+main/__pycache__
+main/migrations
 front/__pycache__
 front/migrations
 front/node_modules
