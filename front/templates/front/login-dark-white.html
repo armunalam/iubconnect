@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" style="height: 100%; ">
+
+<head>
+    <title>Login</title>
+    <!-- <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" type="text/css" href="{% static 'front/style-dark-white.css' %}" />
+</head>
+
+<body>
+    <div class="body rounded">
+        <form style="text-align: center; width: 330px;">
+            <img src="{% static 'front/images/iub_logo.png' %}" width="150px" />
+            <h1>IUBConnect</h1>
+            <div style="text-align: left;">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="username" class="form-control" autofocus placeholder="Username" />
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control" placeholder="Password" />
+                    <small><a href="" onclick="forgotpassword();">Forgot your password?</a></small>
+                    <script>
+                        function forgotpassword() {
+                            alert("Please contact the Registrar's Office.");
+                        }
+                    </script>
+                </div>
+            </div>
+            <button class="btn btn-primary">Log in</button>
+        </form>
+    </div>
+</body>
+
+</html>
