@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import { BsPeopleCircle, BsSearch } from 'react-icons/bs'
 import { FaBars } from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
@@ -20,7 +21,9 @@ export default class Navbar extends Component {
                     <div className="navbar-button" onClick={this.showSidebar}>
                         <FaBars className="navbar-icon" />
                     </div>
-                    <div className="navbar-title">IUBConnect</div>
+                    <Link to="/" exact>
+                        <div className="navbar-title">IUBConnect</div>
+                    </Link>
                     <div className="navbar-right">
                         <Searchbar />
                         <div className="navbar-user" onClick={this.showDropdown}>

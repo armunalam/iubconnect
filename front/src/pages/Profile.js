@@ -6,7 +6,23 @@ import { GoCalendar } from 'react-icons/go'
 import { BsPen } from 'react-icons/bs'
 
 export default class Profile extends Component {
+    state = {
+        first_name: null,
+        last_name: null,
+    }
+
+    componentDidMount() {
+        fetch('/main/api/user/1/')
+            .then(response => response.json())
+            .then(data => {
+                console.log('This is your data', data)
+                this.setState({first_name: data.first_name, last_name: data.last_name})
+            })
+    }
+
     render() {
+        const state = this.state
+        
         return (
             <div className='main-body-margin'>
                 <Box extraClass="main-box">
@@ -15,7 +31,7 @@ export default class Profile extends Component {
                             <img className="profile-image" src="https://raw.githubusercontent.com/armunalam/resume/main/images/ArmunAlam.jpg" />
                         </div>
                         <div>
-                            <h1 id="profile-main-title">Armun Alam</h1>
+                            <h1 id="profile-main-title">{state.first_name} {state.last_name}</h1>
                             <h2 id="profile-sub-title">Student</h2>
                         </div>
                     </div>

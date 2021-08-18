@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { render } from 'react-dom'
 import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import Dashboard from './pages/Dashboard'
@@ -14,13 +13,18 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        window.addEventListener('resize', () => {
-            if (window.innerWidth <= 850) {
-                this.setState({ sidebar: false })
-            } else {
-                this.setState({ sidebar: true })
-            }
-        })
+        if (window.innerWidth <= 850) {
+            this.setState({ sidebar: false })
+        } else {
+            this.setState({ sidebar: true })
+        }
+        // window.addEventListener('resize', () => {
+        //     if (window.innerWidth <= 850) {
+        //         this.setState({ sidebar: false })
+        //     } else {
+        //         this.setState({ sidebar: true })
+        //     }
+        // })
     }
 
     componentDidUpdate() {
@@ -45,10 +49,26 @@ export default class App extends Component {
                         <Route path="/connections" exact component={Connections} />
                     </Switch>
                 </div>
+                {/* <Route component={<MainView app={this} />} /> */}
             </BrowserRouter>
         )
     }
 }
 
-const container = document.getElementById("root")
-render(<App />, container)
+// class MainView extends Component {
+//     render() {
+//         return (
+//             <>
+//                 <Navbar app={this.props.app} />
+//                 <Sidebar app={this.props.app} />
+//                 <div className={this.props.app.state.sidebar ? "main-body" : "main-body main-body-sidebar"}>
+//                     <Switch>
+//                         <Route path="/" exact component={Dashboard} />
+//                         <Route path="/profile" exact component={Profile} />
+//                         <Route path="/connections" exact component={Connections} />
+//                     </Switch>
+//                 </div>
+//             </>
+//         )
+//     }
+// }
