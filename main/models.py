@@ -14,7 +14,9 @@ class Department(models.Model):
 
 
 class Account(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name= 'account', on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50, null=True)
+    last_name = models.CharField(max_length=50, null=True)
     date_of_birth = models.DateField(null=True)
     GENDER_OPTIONS = (
         ('m', 'Male'),
