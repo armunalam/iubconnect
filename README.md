@@ -18,7 +18,9 @@ A web-based application for IUB students to connect with alumni and faculties.
     
 ### Run Server
 Enter the following command in the terminal (in the backend folder) to run the backend server:
-`python manage.py runserver`.
+```bash
+python manage.py runserver
+```
 
 
 ## Frontend
