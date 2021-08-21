@@ -1,7 +1,7 @@
 # IUBConnect
 A web-based application for IUB students to connect with alumni and faculties.
 
-# Dependencies
+## Dependencies
 * Python 3.8.10
 * Conda Virtual Environment
 * Node.js and npm
