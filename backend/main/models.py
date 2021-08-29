@@ -17,14 +17,21 @@ class Account(models.Model):
     user = models.ForeignKey(User, related_name= 'account', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50, null=True)
+    iub_id_number = models.CharField(max_length=7, null=True)
     date_of_birth = models.DateField(null=True)
     GENDER_OPTIONS = (
-        ('m', 'Male'),
-        ('f', 'Female'),
+        ('Male', 'Male'),
+        ('Female', 'Female'),
     )
-    gender = models.CharField(max_length=1, choices=GENDER_OPTIONS)
+    gender = models.CharField(max_length=6, choices=GENDER_OPTIONS)
     phone = models.CharField(max_length=15)
-    address = models.CharField(max_length=30)
+    address = models.CharField(max_length=30, null=True)
+    USER_TYPE_OPTIONS = (
+        ('Student', 'Student'),
+        ('Faculty', 'Faculty'),
+        ('Alumnus', 'Alumnus'),
+    )
+    user_type = models.CharField(max_length=7, choices=USER_TYPE_OPTIONS)
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
     def __str__(self):

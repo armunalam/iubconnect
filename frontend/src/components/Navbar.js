@@ -4,11 +4,17 @@ import { BsPeopleCircle, BsSearch } from 'react-icons/bs'
 import { FaBars } from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
 import { AiOutlineLogout } from 'react-icons/ai'
+import axios from 'axios'
+import API_URL from '../urls'
 
 export default class Navbar extends Component {
     constructor(props) {
         super(props)
         this.dropdownbox = React.createRef()
+    }
+
+    state = {
+        user_name: ''
     }
 
     showSidebar = () => this.props.app.setState({
@@ -21,6 +27,21 @@ export default class Navbar extends Component {
 
     componentDidMount() {
         document.addEventListener('click', this.closeDropdown)
+
+        const token = window.localStorage['token']
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            },
+        }
+
+        axios
+            .get(`${API_URL}/account/`, config)
+            .then((res) => {
+                this.setState({ user_name: `${res.data[0].first_name} ${res.data[0].last_name}` })
+            })
+            .catch((err) => console.log(err))
     }
 
     closeDropdown = (event) => {
@@ -30,7 +51,7 @@ export default class Navbar extends Component {
                     dropdown: false
                 })
             }
-        } catch(TypeError) {
+        } catch (TypeError) {
             this.props.app.setState({
                 dropdown: false
             })
@@ -52,7 +73,7 @@ export default class Navbar extends Component {
                         <div style={{ height: '100%' }} ref={this.dropdownbox}>
                             <div className="navbar-user" onClick={this.showDropdown}>
                                 <BsPeopleCircle className="navbar-user-icon" />
-                                <span className="navbar-user-text">Armun Alam</span>
+                                <span className="navbar-user-text">{this.state.user_name}</span>
                             </div>
                             <DropdownMenu app={this.props.app} />
                         </div>

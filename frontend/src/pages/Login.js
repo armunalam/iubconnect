@@ -37,6 +37,7 @@ export class Login extends Component {
                         margin: '20px',
                         marginTop: '5px',
                         fontSize: '40px',
+                        fontFamily: 'Inter, Oxygen, sans-serif'
                     }}>IUBConnect</h1>
                     <form onSubmit={this.onSubmit}>
                         <input className="login-field"
@@ -52,11 +53,9 @@ export class Login extends Component {
                             value={this.state.password}
                             onChange={this.onChange}
                             type="password" />
-                        {/* <Link to="/"> */}
                         <button className="login-button" type="submit">Log In</button>
-                        {/* </Link> */}
                     </form>
-                    <div style={{ marginTop: "15px" }}>Don't have an account? <Link to="/" className="inline-link">Create here</Link>.</div>
+                    <div style={{ marginTop: '15px' }}>Don't have an account? <Link to="/register" className="inline-link">Create here</Link>.</div>
                 </Box>
             </div>
         )

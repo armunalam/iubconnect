@@ -3,14 +3,15 @@ import Navbar from './components/Navbar'
 import Sidebar from './components/Sidebar'
 import Login from './pages/Login'
 import Logout from './pages/Logout'
+import Registration from './pages/Registration'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
 import Connections from './pages/Connections'
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom'
-import { Provider } from 'react-redux';
-import store from './store';
+import { Provider } from 'react-redux'
+import store from './store'
 import PrivateRoute from './components/PrivateRoute'
-import { loadUser } from './actions/auth';
+import { loadUser } from './actions/auth'
 
 export default class App extends Component {
     componentDidMount() {
@@ -33,6 +34,7 @@ export default class App extends Component {
                     <Switch>
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />
+                        <Route exact path="/register" component={Registration} />
                         <PrivateRoute component={MainView} />
                     </Switch>
                 </BrowserRouter>

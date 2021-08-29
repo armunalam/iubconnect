@@ -1,12 +1,79 @@
 import React, { Component } from 'react'
+// import { connect } from 'react-redux'
+// import PropTypes from 'prop-types'
+// import { getProfileData } from '../actions/profile'
+import axios from 'axios'
+import API_URL from '../urls'
 import Box from '../components/Box'
 import GridBox from '../components/GridBox'
 import { IoMdSchool } from 'react-icons/io'
 import { GoCalendar } from 'react-icons/go'
 import { BsPen } from 'react-icons/bs'
+import male_avatar from '../assets/male_avatar.png'
+import female_avatar from '../assets/female_avatar.png'
 
 export default class Profile extends Component {
+    state = {
+        name: '',
+        user_type: '',
+        date_of_birth: '',
+        gender: '',
+        phone: '',
+        address: '',
+        department: '',
+
+    }
+
+    // static propTypes = {
+    //     profileData: PropTypes.array.isRequired,
+    //     getProfileData: PropTypes.func.isRequired,
+    // }
+
+    componentDidMount() {
+        // this.props.getProfileData()
+        const token = window.localStorage['token']
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            },
+        }
+
+        axios
+            .get(`${API_URL}/account/`, config)
+            .then((res) => {
+                this.setState({
+                    name: `${res.data[0].first_name} ${res.data[0].last_name}`,
+                    user_type: res.data[0].user_type,
+                    gender: res.data[0].gender,
+                })
+            })
+            .catch((err) => console.log(err))
+    }
+
+    // componentWillMount() {
+    //     if (this.props.profileData) {
+    //         let gender = this.props.profileData[0].gender
+    //         if (gender == 'm') gender = 'Male'
+    //         else if (gender == 'f') gender = 'Female'
+    //         else gender = ''
+
+    //         this.setState({
+    //             name: `${this.props.profileData[0].first_name} ${this.props.profileData[0].last_name}`,
+    //             date_of_birth: this.props.profileData[0].date_of_birth,
+    //             gender: gender,
+    //             phone: this.props.profileData[0].phone,
+    //             address: '',
+    //             department: '',
+    //         })
+
+    //         console.log(this.props.profileData[0].address)
+    //     }
+    // }
+
     render() {
+        const { name, user_type, gender } = this.state
+
         return (
             <div className='main-body-margin'>
                 <Box extraClass="main-box">
@@ -14,12 +81,12 @@ export default class Profile extends Component {
                         <div>
                             {/* <img className="profile-image" src="images/ArmunAlam.jpg" /> */}
                             <img className="profile-image"
-                                 src="https://raw.githubusercontent.com/armunalam/resume/main/images/ArmunAlam.jpg"
-                                 alt="Profile" />
+                                src={gender === 'Female' ? female_avatar : male_avatar}
+                                alt="Profile" />
                         </div>
                         <div>
-                            <h1 id="profile-main-title">Armun Alam</h1>
-                            <h2 id="profile-sub-title">Student</h2>
+                            <h1 id="profile-main-title">{name}</h1>
+                            <h2 id="profile-sub-title">{user_type}</h2>
                         </div>
                     </div>
                 </Box>
@@ -69,3 +136,10 @@ export default class Profile extends Component {
         )
     }
 }
+
+
+// const mapStateToProps = (state) => ({
+//     profileData: state.profile.profileData,
+// })
+
+// export default connect(mapStateToProps, { getProfileData })(Profile)

@@ -1,18 +1,47 @@
 import React, { Component } from 'react'
+import axios from 'axios'
+import API_URL from '../urls'
 import Box from '../components/Box'
 import GridBox from '../components/GridBox'
 import Button from '../components/Button'
 import { BsFillPersonLinesFill, BsBuilding } from 'react-icons/bs'
 
 export default class Dashboard extends Component {
+    state = {
+        name: '',
+        user_type: '',
+    }
+
+    componentDidMount() {
+        const token = window.localStorage['token']
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            },
+        }
+
+        axios
+            .get(`${API_URL}/account/`, config)
+            .then((res) => {
+                this.setState({
+                    name: `${res.data[0].first_name} ${res.data[0].last_name}`,
+                    user_type: res.data[0].user_type,
+                })
+            })
+            .catch((err) => console.log(err))
+    }
+
     render() {
+        const { name, user_type } = this.state
+
         return (
             <div className='main-body-margin'>
                 <Box extraClass="main-box">
                     <div style={{ textAlign: 'center' }}>
                         <div>
-                            <h1 id="profile-main-title">Armun Alam</h1>
-                            <h2 id="profile-sub-title">Student</h2>
+                            <h1 id="profile-main-title">{name}</h1>
+                            <h2 id="profile-sub-title">{user_type}</h2>
                         </div>
                     </div>
                 </Box>
