@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import API_URL from '../urls'
 import Box from '../components/Box'
@@ -10,16 +10,19 @@ export default function Connections() {
     const [empty, setEmpty] = useState(false)
 
     useEffect(() => {
-        axios.get(`${API_URL}/allaccount/`).then(response => {
-            setUsers(response.data)
-        }).catch(error => console.log(error))
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/allaccount/`)
+                setUsers(response.data)
+                if (response.data.length === 0) setEmpty(true)
+                else setEmpty(false)
+            } catch (error) {
+                setEmpty(true)
+                console.error(error)
+            }
+        }
+        fetchData()
     }, [])
-
-    useEffect(() => {
-        if (users.length === 0)
-            setEmpty(true)
-        else setEmpty(false)
-    }, [users])
 
     return (
         <div className='main-body-margin'>

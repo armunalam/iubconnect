@@ -12,6 +12,7 @@ import { Provider } from 'react-redux'
 import store from './store'
 import PrivateRoute from './components/PrivateRoute'
 import { loadUser } from './actions/auth'
+import ProfileEducation from './settings/ProfileEducation'
 
 export default class App extends Component {
     componentDidMount() {
@@ -57,14 +58,20 @@ class MainView extends Component {
         }
     }
 
+    sidebarOnResize = () => {
+        if (window.innerWidth <= 850) {
+            this.setState({ sidebar: false })
+        } else {
+            this.setState({ sidebar: true })
+        }
+    }
+    
     componentDidUpdate() {
-        window.addEventListener('resize', () => {
-            if (window.innerWidth <= 850) {
-                this.setState({ sidebar: false })
-            } else {
-                this.setState({ sidebar: true })
-            }
-        })
+        window.addEventListener('resize', this.sidebarOnResize)
+    }
+    
+    componentWillUnmount() {
+        window.addEventListener('resize', this.sidebarOnResize)
     }
 
     render() {
@@ -76,6 +83,7 @@ class MainView extends Component {
                     <Switch>
                         <Route exact path="/" component={Dashboard} />
                         <Route exact path="/profile" component={Profile} />
+                        <Route exact path="/profile/education" component={ProfileEducation} />
                         <Route exact path="/connections" component={Connections} />
                         <Route component={PageNotFound} />
                     </Switch>

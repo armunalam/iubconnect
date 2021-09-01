@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import Box from '../components/Box'
 import { connect } from 'react-redux'
@@ -6,6 +6,13 @@ import PropTypes from 'prop-types'
 import { login } from '../actions/auth'
 
 export class Login extends Component {
+    constructor(props) {
+        super(props)
+        this.authMessage = createRef()
+        this.authField1 = createRef()
+        this.authField2 = createRef()
+    }
+
     state = {
         username: '',
         password: '',
@@ -16,9 +23,17 @@ export class Login extends Component {
         isAuthenticated: PropTypes.bool,
     }
 
-    onSubmit = (e) => {
+    onSubmit = async (e) => {
         e.preventDefault()
-        this.props.login(this.state.username, this.state.password)
+
+        const { username, password } = this.state
+        const isLoggedIn = await this.props.login(username, password)
+        
+        if (!isLoggedIn) {
+            this.authMessage.current.className = 'login-fail-message'
+            this.authField1.current.className = 'login-field auth-field'
+            this.authField2.current.className = 'login-field auth-field'
+        }
     }
 
     onChange = (e) => {
@@ -46,15 +61,18 @@ export class Login extends Component {
                             value={this.state.username}
                             onChange={this.onChange}
                             type="text"
-                            autocomplete="off" />
+                            autoComplete="off"
+                            ref={this.authField1} />
                         <input className="login-field"
                             name="password"
                             placeholder="Password"
                             value={this.state.password}
                             onChange={this.onChange}
-                            type="password" />
+                            type="password"
+                            ref={this.authField2} />
                         <button className="login-button" type="submit">Log In</button>
                     </form>
+                    <div ref={this.authMessage} className="login-no-message">The username or password is incorrect.</div>
                     <div style={{ marginTop: '15px' }}>Don't have an account? <Link to="/register" className="inline-link">Create here</Link>.</div>
                 </Box>
             </div>

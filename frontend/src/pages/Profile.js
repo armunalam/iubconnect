@@ -6,11 +6,13 @@ import axios from 'axios'
 import API_URL from '../urls'
 import Box from '../components/Box'
 import GridBox from '../components/GridBox'
+import Button from '../components/Button'
 import { IoMdSchool } from 'react-icons/io'
 import { GoCalendar } from 'react-icons/go'
 import { BsPen } from 'react-icons/bs'
 import male_avatar from '../assets/male_avatar.png'
 import female_avatar from '../assets/female_avatar.png'
+import { Link } from 'react-router-dom'
 
 export default class Profile extends Component {
     state = {
@@ -92,7 +94,10 @@ export default class Profile extends Component {
                 </Box>
                 <Box extraClass="main-box">
                     <div>
-                        <h1>Education</h1>
+                        <div>
+                            <h1 style={{float:'left'}}>Education</h1>
+                            <Link to="/profile/education"><Button extraClass="edit-button">Edit</Button></Link>
+                        </div>
                         <GridBox>
                             <Box extraClass="box-padding">
                                 <h2>Ingenious International School</h2>

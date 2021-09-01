@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { VscLoading } from 'react-icons/vsc'
 import loading from '../assets/loading.gif'
 
 const PrivateRoute = ({ component: Component, auth, ...rest }) => (

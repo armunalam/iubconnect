@@ -516,6 +516,24 @@ option {
     box-shadow: 0px 0px 0px 1px var(--hover-color) inset;
 }
 
+.login-fail-message {
+    display: block;
+    color: rgb(189, 34, 34);
+    margin-top: 15px;
+}
+
+.login-no-message {
+    display: none;
+}
+
+.auth-field {
+    box-shadow: 0px 0px 0px 2px rgb(189, 34, 34) inset;
+}
+
+.auth-field:focus {
+    box-shadow: 0px 0px 0px 2px rgb(189, 34, 34) inset;
+}
+
 
 /* Registration */
 
@@ -584,6 +602,43 @@ option {
     box-shadow: 0px 0px 0px 1px var(--hover-color) inset;
 }
 
+
+/* Edit Fields */
+
+.edit-field {
+    height: 40px;
+    font-size: 18px;
+}
+
+.edit-remove-button {
+    float: right;
+    margin: 0px;
+}
+
+.center-container {
+    display: grid;
+    place-items: center;
+}
+
+.add-button {
+    font-size: 80px;
+    padding: 15px 30px 20px;
+    background-color: rgb(250, 250, 250);
+}
+
+.edit-button {
+    float: left;
+    margin: 0px;
+    margin-left: 15px;
+    font-size: 18px;
+}
+
+.edit-button:hover {
+    color: var(--hover-text-color);
+    background-color: var(--hover-color);
+    border: none;
+    box-shadow: 0px 0px 0px 1px var(--hover-color) inset;
+}
 
 /* Scrollbar (not supported in Firefox) */
 

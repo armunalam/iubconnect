@@ -35,7 +35,7 @@ export const loadUser = () => (dispatch, getState) => {
 }
 
 // LOGIN USER
-export const login = (username, password) => (dispatch) => {
+export const login = (username, password) => async (dispatch) => {
     // Headers
     const config = {
         headers: {
@@ -45,21 +45,22 @@ export const login = (username, password) => (dispatch) => {
 
     // Request Body
     const body = JSON.stringify({ username, password })
+    // const isLoggedIn = true;
 
-    axios
-        .post(`${API_URL}/auth/login`, body, config)
-        .then((res) => {
-            dispatch({
-                type: LOGIN_SUCCESS,
-                payload: res.data,
-            })
+    try {
+        const res = await axios.post(`${API_URL}/auth/login`, body, config)
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: res.data,
         })
-        .catch((err) => {
-            dispatch(returnErrors(err.response.data, err.response.status))
-            dispatch({
-                type: LOGIN_FAIL,
-            })
+    } catch (err) {
+        dispatch(returnErrors(err.response.data, err.response.status))
+        dispatch({
+            type: LOGIN_FAIL,
         })
+        return false
+    }
+    return true
 }
 
 // REGISTER USER

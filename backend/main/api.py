@@ -1,6 +1,7 @@
 from rest_framework import viewsets, permissions, generics, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.forms.models import model_to_dict
 from knox.models import AuthToken
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
@@ -74,7 +75,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.account.all()
-        
+
     # def post(self, request, *args, **kwargs):
     #     # serializer = self.get_serializer(data=request.data)
     #     # serializer.is_valid(raise_exception=True)
@@ -82,7 +83,7 @@ class AccountViewSet(viewsets.ModelViewSet):
     #     # return Response({
     #     #     'user': AccountSerializer(account, context=self.get_serializer_context()).data,
     #     # })
-        
+
     #     request.data['user'] = self.request.user
     #     print(f'\nPRINTINGGGGGGGG1: {request.data}\n')
     #     serializer = self.get_serializer(data=request.data)
@@ -90,44 +91,34 @@ class AccountViewSet(viewsets.ModelViewSet):
     #         serializer.save()
     #         return Response(serializer.data, status=status.HTTP_201_CREATED)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
 
 
-# class AccountPostViewSet(viewsets.ViewSet):
-#     # serializer_class = AccountSerializer
-    
-#     # def perform_create(self, serializer):
-#     #     serializer.save(user=self.request.user)
-        
-#     def post(self, request, *args, **kwargs):
-#         # serializer = self.get_serializer(data=request.data)
-#         # serializer.is_valid(raise_exception=True)
-#         # account = serializer.save()
-#         # return Response({
-#         #     'user': AccountSerializer(account, context=self.get_serializer_context()).data,
-#         # })
-#         serializer = AccountSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class CustomViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
 
-# @api_view(['POST'])
-# def AccountPostViewSet(request):
-#     """
-#     List all code snippets, or create a new snippet.
-#     """
-#     # if request.method == 'GET':
-#     #     snippets = Snippet.objects.all()
-#     #     serializer = SnippetSerializer(snippets, many=True)
-#     #     return Response(serializer.data)
+    def get(self, request):
+        # print(request.user)
+        print(model_to_dict(Account.objects.get(user=request.user)))
 
-#     if request.method == 'POST':
-#         serializer = AccountSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        data = {
+            'name': 'Test',
+            'type': 'Testing',
+            'search': request.query_params.get('search'),
+            # 'accounts': list(Account.objects.all().values())
+            'account': model_to_dict(Account.objects.get(user=request.user))
+            # [dict(user) for user in Account.objects.all()]
+        }
+
+        return Response(data)
+
+    def post(self, request):
+        School(school_id=request.data.get('school_id'),
+               school_name=request.data.get('school_name')).save()
+        return Response(request.data)
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
 
 
 class AccountAllViewSet(viewsets.ModelViewSet):
@@ -135,6 +126,7 @@ class AccountAllViewSet(viewsets.ModelViewSet):
 
     permission_classes = [
         permissions.AllowAny,
+        # permissions.IsAuthenticated,
     ]
 
     serializer_class = AccountAllSerializer
@@ -155,13 +147,6 @@ class DepartmentViewSet(viewsets.ModelViewSet):
     ]
     serializer_class = DepartmentSerializer
 
-
-# class TestView(viewsets.ModelViewSet):
-#     permission_classes = [
-#         permissions.AllowAny,
-#     ]
-
-#     serializer_class =
 
 class TestView(viewsets.ModelViewSet):
     permission_classes = [

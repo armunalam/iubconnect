@@ -20,7 +20,7 @@ export default class Sidebar extends Component {
                 <ul className="sidebar-items">
                     <div className="searchbar-sidebar hidden-element">
                         <form>
-                            <input className="searchbar-sidebar-field" placeholder="Search" name="search" autocomplete="off" />
+                            <input className="searchbar-sidebar-field" placeholder="Search" name="search" autoComplete="off" />
                             <button className="searchbar-sidebar-button"><BsSearch /></button>
                         </form>
                     </div>

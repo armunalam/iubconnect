@@ -43,6 +43,10 @@ export default class Navbar extends Component {
             })
             .catch((err) => console.log(err))
     }
+    
+    componentWillUnmount() {
+        document.removeEventListener('click', this.closeDropdown)
+    }
 
     closeDropdown = (event) => {
         try {
@@ -111,7 +115,7 @@ class Searchbar extends Component {
         return (
             <div className="searchbar">
                 <form>
-                    <input className="searchbar-field" placeholder="Search" name="search" autocomplete="off" />
+                    <input className="searchbar-field" placeholder="Search" name="search" autoComplete="off" />
                     <button className="searchbar-button"><BsSearch /></button>
                 </form>
             </div>

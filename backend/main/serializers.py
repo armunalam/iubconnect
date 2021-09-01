@@ -46,7 +46,6 @@ class AccountSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, val):
-        print(f'\nPRINTINGGGGGGGG:\n')
         account = Account(
             user=val['user'],
             first_name=val['first_name'],

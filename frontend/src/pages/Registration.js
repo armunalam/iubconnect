@@ -6,7 +6,6 @@ import DatePicker from "react-datepicker";
 import { Link, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
-import { login } from '../actions/auth'
 // import { addDays, subDays } from 'date-fns';
 
 class Registration extends Component {
@@ -32,12 +31,6 @@ class Registration extends Component {
     }
 
     componentDidMount() {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        }
-
         axios
             .get(`${API_URL}/department/`)
             .then(response => {
@@ -127,7 +120,7 @@ class Registration extends Component {
                                     name="username"
                                     placeholder="Username"
                                     type="text"
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     required
                                     onChange={this.onChange} />
 
@@ -135,7 +128,7 @@ class Registration extends Component {
                                     name="iub_id_number"
                                     placeholder="IUB ID number"
                                     type="text"
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     required
                                     onChange={this.onChange} />
 
@@ -157,7 +150,7 @@ class Registration extends Component {
                                     name="first_name"
                                     placeholder="First name"
                                     type="text"
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     required
                                     onChange={this.onChange} />
 
@@ -165,7 +158,7 @@ class Registration extends Component {
                                     name="last_name"
                                     placeholder="Last name"
                                     type="text"
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     required
                                     onChange={this.onChange} />
 
@@ -173,7 +166,7 @@ class Registration extends Component {
                                     name="email"
                                     placeholder="Email"
                                     type="text"
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     required
                                     onChange={this.onChange} />
 
@@ -222,7 +215,7 @@ class Registration extends Component {
                                     name="phone"
                                     placeholder="Phone Number"
                                     type="text"
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     required
                                     onChange={this.onChange} />
                                 
