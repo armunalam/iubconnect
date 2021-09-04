@@ -624,6 +624,7 @@ option {
     font-size: 80px;
     padding: 15px 30px 20px;
     background-color: rgb(250, 250, 250);
+    min-height: 264px;
 }
 
 .edit-button {

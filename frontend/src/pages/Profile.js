@@ -23,7 +23,8 @@ export default class Profile extends Component {
         phone: '',
         address: '',
         department: '',
-
+        education: [],
+        experience: [],
     }
 
     // static propTypes = {
@@ -51,6 +52,25 @@ export default class Profile extends Component {
                 })
             })
             .catch((err) => console.log(err))
+
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/education`, config)
+                this.setState({ education: response.data })
+            } catch (error) {
+                console.error(error)
+            }
+
+            try {
+                const response2 = await axios.get(`${API_URL}/experience`, config)
+                this.setState({ experience: response2.data })
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        fetchData()
     }
 
     // componentWillMount() {
@@ -95,11 +115,26 @@ export default class Profile extends Component {
                 <Box extraClass="main-box">
                     <div>
                         <div>
-                            <h1 style={{float:'left'}}>Education</h1>
+                            <h1 style={{ float: 'left' }}>Education</h1>
                             <Link to="/profile/education"><Button extraClass="edit-button">Edit</Button></Link>
                         </div>
                         <GridBox>
-                            <Box extraClass="box-padding">
+                            {this.state.education.length !== 0 ?
+                                this.state.education.map((item, index) =>
+                                    <Box extraClass="box-padding" key={index}>
+                                        <h2>{item.name}</h2>
+                                        <p className="vertical-flexbox">
+                                            <IoMdSchool className="list-items" />
+                                            {item.qual}
+                                        </p>
+                                        <p className="vertical-flexbox">
+                                            <GoCalendar className="list-items" />
+                                            {item.year}
+                                        </p>
+                                    </Box>
+                                ) : <div>No education information added yet.</div>
+                            }
+                            {/* <Box extraClass="box-padding">
                                 <h2>Ingenious International School</h2>
                                 <p className="vertical-flexbox"><IoMdSchool className="list-items" />O and A Levels</p>
                                 <p className="vertical-flexbox"><GoCalendar className="list-items" />2016-2017</p>
@@ -108,13 +143,31 @@ export default class Profile extends Component {
                                 <h2>Independent University, Bangladesh</h2>
                                 <p className="vertical-flexbox"><IoMdSchool className="list-items" />Computer Science and Engineering</p>
                                 <p className="vertical-flexbox"><GoCalendar className="list-items" />2018-Present</p>
-                            </Box>
+                            </Box> */}
                         </GridBox>
                     </div>
                     <div>
-                        <h1>Experience</h1>
+                        <div>
+                            <h1 style={{ float: 'left' }}>Experience</h1>
+                            <Link to="/profile/experience"><Button extraClass="edit-button">Edit</Button></Link>
+                        </div>
                         <GridBox>
-                            <Box extraClass="box-padding">
+                            {this.state.experience.length !== 0 ?
+                                this.state.experience.map((item, index) =>
+                                    <Box extraClass="box-padding">
+                                        <h2>{item.title}</h2>
+                                        <p className="vertical-flexbox">
+                                            <BsPen className="list-items" />
+                                            {item.pos}
+                                        </p>
+                                        <p className="vertical-flexbox">
+                                            <GoCalendar className="list-items" />
+                                            {item.year}
+                                        </p>
+                                    </Box>
+                                ) : <div>No experience information added yet.</div>
+                            }
+                            {/* <Box extraClass="box-padding">
                                 <h2>Cloud Creative Limited</h2>
                                 <p className="vertical-flexbox"><BsPen className="list-items" />Software Support Engineer</p>
                                 <p className="vertical-flexbox"><GoCalendar className="list-items" />2021-Present</p>
@@ -133,7 +186,7 @@ export default class Profile extends Component {
                                 <h2>Independent University, Bangladesh</h2>
                                 <p className="vertical-flexbox"><BsPen className="list-items" />Student on Duty</p>
                                 <p className="vertical-flexbox"><GoCalendar className="list-items" />2018-2019</p>
-                            </Box>
+                            </Box> */}
                         </GridBox>
                     </div>
                 </Box>

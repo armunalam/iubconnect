@@ -5,7 +5,7 @@ from django.forms.models import model_to_dict
 from knox.models import AuthToken
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
-from .models import Account, School, Department
+from .models import Account, School, Department, UserEducation, UserExperience
 from .serializers import (AccountSerializer,
                           UserSerializer,
                           SchoolSerializer,
@@ -115,6 +115,72 @@ class CustomViewSet(APIView):
         School(school_id=request.data.get('school_id'),
                school_name=request.data.get('school_name')).save()
         return Response(request.data)
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
+
+
+class EducationViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        data = list(UserEducation.objects.filter(user=request.user).values())
+        return Response(data)
+
+    def post(self, request):
+        if request.data.get('id'):
+            data = UserEducation(id=request.data.get('id'),
+                                 user=request.user,
+                                 name=request.data.get('name'),
+                                 qual=request.data.get('qual'),
+                                 year=request.data.get('year'))
+        else:
+            data = UserEducation(user=request.user,
+                                 name=request.data.get('name'),
+                                 qual=request.data.get('qual'),
+                                 year=request.data.get('year'))
+        if request.data.get('delete') == 'd':
+            data.delete()
+            data = {'status': 'deleted'}
+        else:
+            data.save()
+            data = model_to_dict(data)
+
+        return Response(data)
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
+
+
+class ExperienceViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        data = list(UserExperience.objects.filter(user=request.user).values())
+        return Response(data)
+
+    def post(self, request):
+        if request.data.get('id'):
+            data = UserExperience(id=request.data.get('id'),
+                                  user=request.user,
+                                  title=request.data.get('title'),
+                                  pos=request.data.get('pos'),
+                                  year=request.data.get('year'))
+        else:
+            data = UserExperience(user=request.user,
+                                  title=request.data.get('title'),
+                                  pos=request.data.get('pos'),
+                                  year=request.data.get('year'))
+        if request.data.get('delete') == 'd':
+            data.delete()
+            data = {'status': 'deleted'}
+        else:
+            data.save()
+            data = model_to_dict(data)
+
+        return Response(data)
 
     @classmethod
     def get_extra_actions(cls):

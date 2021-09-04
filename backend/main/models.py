@@ -14,7 +14,8 @@ class Department(models.Model):
 
 
 class Account(models.Model):
-    user = models.ForeignKey(User, related_name= 'account', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        User, related_name='account', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50, null=True)
     iub_id_number = models.CharField(max_length=7, null=True)
@@ -36,6 +37,22 @@ class Account(models.Model):
 
     def __str__(self):
         return str(self.user)
+
+
+class UserEducation(models.Model):
+    user = models.ForeignKey(
+        User, related_name='user_education', on_delete=models.CASCADE)
+    name = models.CharField(max_length=60, null=True)
+    qual = models.CharField(max_length=60, null=True)
+    year = models.CharField(max_length=15, null=True)
+    
+
+class UserExperience(models.Model):
+    user = models.ForeignKey(
+        User, related_name='user_experience', on_delete=models.CASCADE)
+    title = models.CharField(max_length=60, null=True)
+    pos = models.CharField(max_length=60, null=True)
+    year = models.CharField(max_length=15, null=True)
 
 
 class Connection(models.Model):

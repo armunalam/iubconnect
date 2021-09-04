@@ -10,7 +10,9 @@ from .api import (AccountViewSet, CustomViewSet,
                   TestView,
                   DepartmentViewSet,
                   AccountAllViewSet,
-                  CustomViewSet)
+                  CustomViewSet,
+                  EducationViewSet,
+                  ExperienceViewSet)
 
 router = routers.DefaultRouter()
 router.register('api/account', AccountViewSet, 'account')
@@ -29,4 +31,6 @@ urlpatterns += [
     path('api/auth/logout', knox_views.LogoutView.as_view(), name='knox_logout'),
     
     path('api/customview', CustomViewSet.as_view()),
+    path('api/education', EducationViewSet.as_view()),
+    path('api/experience', ExperienceViewSet.as_view()),
 ]
