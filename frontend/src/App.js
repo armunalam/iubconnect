@@ -25,15 +25,6 @@ export default class App extends Component {
         return (
             <Provider store={store}>
                 <BrowserRouter>
-                    {/* <Navbar app={this} />
-                <Sidebar app={this} />
-                <div className={this.state.sidebar ? "main-body" : "main-body main-body-sidebar"}>
-                    <Switch>
-                        <Route path="/" exact component={Dashboard} />
-                        <Route path="/profile" exact component={Profile} />
-                        <Route path="/connections" exact component={Connections} />
-                    </Switch>
-                </div> */}
                     <Switch>
                         <Route exact path="/login" component={Login} />
                         <Route exact path="/logout" component={Logout} />
@@ -68,9 +59,6 @@ class MainView extends Component {
             this.setState({ sidebar: true })
         }
     }
-    
-    // componentDidUpdate() {
-    // }
     
     componentWillUnmount() {
         window.addEventListener('resize', this.sidebarOnResize)

@@ -139,38 +139,3 @@ function Searchbar() {
         </div>
     )
 }
-
-
-// class Searchbar extends Component {
-//     state = {
-//         search: ''
-//     }
-
-//     handleSubmit = (e) => {
-//         e.preventDefault()
-//         e.stopPropagation()
-//         // history = useHistory()
-//         if (this.state.search !== '')
-//             this.history.push() //`/search/${this.state.search}`)
-//     }
-
-//     handleChange = (e) => {
-//         this.setState({ search: e.target.value })
-//     }
-
-//     render() {
-//         return (
-//             <div className="searchbar">
-//                 <form onSubmit={this.handleSubmit}>
-//                     <input className="searchbar-field"
-//                         // {this.state.search}
-//                         placeholder="Search"
-//                         name="search"
-//                         onChange={this.handleChange}
-//                         autoComplete="off" />
-//                     <button className="searchbar-button"><BsSearch /></button>
-//                 </form>
-//             </div>
-//         )
-//     }
-// }
