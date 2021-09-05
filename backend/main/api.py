@@ -194,14 +194,23 @@ class SearchViewSet(APIView):
     def get(self, request):
         query = request.query_params.get('q')
 
-        search = Account.objects.annotate(
+        search_query = Account.objects.annotate(
             search=SearchVector('first_name',
                                 'last_name',
                                 'user__username',
                                 'department',
                                 'department__department_name',
                                 'user_type')
-        ).filter(search=query)
+        )
+
+        search = search_query.filter(search=query)
+
+        if (not search):
+            for query in query.split(' '):
+                search = search_query.filter(search__icontains=query)
+
+                if (search):
+                    break
 
         search = list(search.values('first_name',
                                     'last_name',
@@ -210,32 +219,35 @@ class SearchViewSet(APIView):
                                     'department__department_name',
                                     'user_type'))
 
-        if (not search):
-            for query in query.split(' '):
-                search = Account.objects.annotate(
-                    search=SearchVector('first_name',
-                                        'last_name',
-                                        'user__username',
-                                        'department',
-                                        'department__department_name',
-                                        'user_type')
-                ).filter(search__icontains=query)
-
-                search = list(search.values('first_name',
-                                            'last_name',
-                                            'user__username',
-                                            'department',
-                                            'department__department_name',
-                                            'user_type'))
-                                            
-                if (search):
-                    break
-
         return Response(search)
 
-    # @classmethod
-    # def get_extra_actions(cls):
-    #     return []
+
+class UserProfileViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        account = Account.objects.filter(
+            user__username=request.query_params.get('username')
+        ).values('first_name', 'last_name', 'user_type', 'gender').first()
+        print(account)
+        
+        education = UserEducation.objects.filter(
+            user__username=request.query_params.get('username')
+        ).values()
+        
+        experience = UserExperience.objects.filter(
+            user__username=request.query_params.get('username')
+        ).values()
+        
+        if (str(request.user) == request.query_params.get('username')):
+            account['is_current_user'] = True
+        else:
+            account['is_current_user'] = False
+        
+        account['education'] = education
+        account['experience'] = experience
+
+        return Response(account)
 
 
 class AccountAllViewSet(viewsets.ModelViewSet):

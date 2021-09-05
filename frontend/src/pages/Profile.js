@@ -54,8 +54,8 @@ export default class Profile extends Component {
             }
 
             try {
-                const response2 = await axios.get(`${API_URL}/experience`, config)
-                this.setState({ experience: response2.data })
+                const response = await axios.get(`${API_URL}/experience`, config)
+                this.setState({ experience: response.data })
             } catch (error) {
                 console.error(error)
             }

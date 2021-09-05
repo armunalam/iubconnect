@@ -13,11 +13,12 @@ from .api import (AccountViewSet, CustomViewSet,
                   CustomViewSet,
                   EducationViewSet,
                   ExperienceViewSet,
-                  SearchViewSet)
+                  SearchViewSet,
+                  UserProfileViewSet)
 
 router = routers.DefaultRouter()
 router.register('api/account', AccountViewSet, 'account')
-router.register('api/user', UserViewSet, 'user')
+# router.register('api/user', UserViewSet, 'user')
 router.register('api/school', SchoolViewSet, 'school')
 router.register('api/department', DepartmentViewSet, 'department')
 router.register('api/allaccount', AccountAllViewSet, 'allaccount')
@@ -35,4 +36,5 @@ urlpatterns += [
     path('api/education', EducationViewSet.as_view()),
     path('api/experience', ExperienceViewSet.as_view()),
     path('api/search', SearchViewSet.as_view()),
+    path('api/user', UserProfileViewSet.as_view()),
 ]
