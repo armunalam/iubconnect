@@ -16,6 +16,7 @@ import ProfileEducation from './settings/ProfileEducation'
 import ProfileExperience from './settings/ProfileExperience'
 import Search from './pages/Search'
 import UserProfile from './pages/UserProfile'
+import Settings from './settings/Settings'
 
 export default class App extends Component {
     componentDidMount() {
@@ -79,6 +80,7 @@ class MainView extends Component {
                         <Route exact path="/connections" component={Connections} />
                         <Route exact path="/search" component={Search} />
                         <Route exact path="/user/:username" component={UserProfile} />
+                        <Route exact path="/settings" component={Settings} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>

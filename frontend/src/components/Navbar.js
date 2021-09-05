@@ -100,7 +100,9 @@ class DropdownMenu extends Component {
                     <Link exact to="/profile" onClick={this.onClick}>
                         <li><BsPeopleCircle className="sidebar-icon" />Profile</li>
                     </Link>
-                    <li><FiSettings className="sidebar-icon" />Settings</li>
+                    <Link exact to="/settings" onClick={this.onClick}>
+                        <li><FiSettings className="sidebar-icon" />Settings</li>
+                    </Link>
                     <Link exact to="/logout">
                         <li><AiOutlineLogout className="sidebar-icon" />Log Out</li>
                     </Link>

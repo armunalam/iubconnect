@@ -39,11 +39,26 @@ function Search({ match, location }) {
     return (
         <div className='main-body-margin'>
             <Box extraClass="main-box">
-                <h1>
-                    {search.length !== 1 ?
-                        'Search Results' : 'Search Result'
-                    } for "{searchParam.q}"
-                </h1>
+                <div>
+                    {search.length == 0 ?
+                        <div>
+                            <h1 style={{ margin: '0px' }}
+                            >Sorry, no match found for "{
+                                    searchParam.q
+                                }" 😞</h1>
+                            <p>Please try again using a different keyword.</p></div> :
+                        <div>
+                            <h1>
+                                {search.length !== 1 ?
+                                    'Search Results' : 'Search Result'
+                                } for "{searchParam.q}"
+                            </h1>
+                            <p>Found {search.length} {search.length !== 1 ?
+                                'results' : 'result'
+                            }.</p>
+                        </div>
+                    }
+                </div>
                 {search.length !== 0 ? (
                     <GridBox>
                         {search.map(({ first_name, last_name, user_type, department__department_name, user__username }) =>
@@ -62,7 +77,7 @@ function Search({ match, location }) {
                             </Link>
                         )}
                     </GridBox>
-                ) : <h2>No match found.</h2>}
+                ) : <div style={{ display: 'none' }}></div>}
             </Box>
         </div>
     )
