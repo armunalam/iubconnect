@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
+import React, { Component, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
 import { BsPeopleCircle, BsSearch } from 'react-icons/bs'
 import { FaBars } from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
@@ -43,7 +43,7 @@ export default class Navbar extends Component {
             })
             .catch((err) => console.log(err))
     }
-    
+
     componentWillUnmount() {
         document.removeEventListener('click', this.closeDropdown)
     }
@@ -110,15 +110,67 @@ class DropdownMenu extends Component {
     }
 }
 
-class Searchbar extends Component {
-    render() {
-        return (
-            <div className="searchbar">
-                <form>
-                    <input className="searchbar-field" placeholder="Search" name="search" autoComplete="off" />
-                    <button className="searchbar-button"><BsSearch /></button>
-                </form>
-            </div>
-        )
+function Searchbar() {
+    const [search, setSearch] = useState('')
+    const history = useHistory()
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        if (search !== '')
+            history.push(`/search?q=${search}`)
     }
+
+    const handleChange = (e) => {
+        setSearch(e.target.value)
+    }
+
+    return (
+        <div className="searchbar">
+            <form onSubmit={handleSubmit}>
+                <input className="searchbar-field"
+                    style={search !== '' ? { width: '400px' } : {}}
+                    placeholder="Search"
+                    name="search"
+                    onChange={handleChange}
+                    autoComplete="off" />
+                <button className="searchbar-button"><BsSearch /></button>
+            </form>
+        </div>
+    )
 }
+
+
+// class Searchbar extends Component {
+//     state = {
+//         search: ''
+//     }
+
+//     handleSubmit = (e) => {
+//         e.preventDefault()
+//         e.stopPropagation()
+//         // history = useHistory()
+//         if (this.state.search !== '')
+//             this.history.push() //`/search/${this.state.search}`)
+//     }
+
+//     handleChange = (e) => {
+//         this.setState({ search: e.target.value })
+//     }
+
+//     render() {
+//         return (
+//             <div className="searchbar">
+//                 <form onSubmit={this.handleSubmit}>
+//                     <input className="searchbar-field"
+//                         // {this.state.search}
+//                         placeholder="Search"
+//                         name="search"
+//                         onChange={this.handleChange}
+//                         autoComplete="off" />
+//                     <button className="searchbar-button"><BsSearch /></button>
+//                 </form>
+//             </div>
+//         )
+//     }
+// }

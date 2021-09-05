@@ -2,8 +2,8 @@ import React from 'react'
 import Box from '../../components/Box'
 import Button from '../../components/Button'
 
-function EditBox({name, qual, year, handleChange, idKey, removeClick, svg1, svg2,
-                  ps1, ps2, ps3}) {
+function EditBox({ name, qual, year, handleChange, idKey, removeClick, svg1, svg2,
+                   ps1, ps2, ps3 }) {
     return (
         <Box extraClass="box-padding">
             <input className="login-field"

@@ -1,7 +1,4 @@
 import React, { Component } from 'react'
-// import { connect } from 'react-redux'
-// import PropTypes from 'prop-types'
-// import { getProfileData } from '../actions/profile'
 import axios from 'axios'
 import API_URL from '../urls'
 import Box from '../components/Box'
@@ -27,13 +24,7 @@ export default class Profile extends Component {
         experience: [],
     }
 
-    // static propTypes = {
-    //     profileData: PropTypes.array.isRequired,
-    //     getProfileData: PropTypes.func.isRequired,
-    // }
-
     componentDidMount() {
-        // this.props.getProfileData()
         const token = window.localStorage['token']
         const config = {
             headers: {
@@ -73,26 +64,6 @@ export default class Profile extends Component {
         fetchData()
     }
 
-    // componentWillMount() {
-    //     if (this.props.profileData) {
-    //         let gender = this.props.profileData[0].gender
-    //         if (gender == 'm') gender = 'Male'
-    //         else if (gender == 'f') gender = 'Female'
-    //         else gender = ''
-
-    //         this.setState({
-    //             name: `${this.props.profileData[0].first_name} ${this.props.profileData[0].last_name}`,
-    //             date_of_birth: this.props.profileData[0].date_of_birth,
-    //             gender: gender,
-    //             phone: this.props.profileData[0].phone,
-    //             address: '',
-    //             department: '',
-    //         })
-
-    //         console.log(this.props.profileData[0].address)
-    //     }
-    // }
-
     render() {
         const { name, user_type, gender } = this.state
 
@@ -101,7 +72,6 @@ export default class Profile extends Component {
                 <Box extraClass="main-box">
                     <div className="profile-heading">
                         <div>
-                            {/* <img className="profile-image" src="images/ArmunAlam.jpg" /> */}
                             <img className="profile-image"
                                 src={gender === 'Female' ? female_avatar : male_avatar}
                                 alt="Profile" />
@@ -134,16 +104,6 @@ export default class Profile extends Component {
                                     </Box>
                                 ) : <div>No education information added yet.</div>
                             }
-                            {/* <Box extraClass="box-padding">
-                                <h2>Ingenious International School</h2>
-                                <p className="vertical-flexbox"><IoMdSchool className="list-items" />O and A Levels</p>
-                                <p className="vertical-flexbox"><GoCalendar className="list-items" />2016-2017</p>
-                            </Box>
-                            <Box extraClass="box-padding">
-                                <h2>Independent University, Bangladesh</h2>
-                                <p className="vertical-flexbox"><IoMdSchool className="list-items" />Computer Science and Engineering</p>
-                                <p className="vertical-flexbox"><GoCalendar className="list-items" />2018-Present</p>
-                            </Box> */}
                         </GridBox>
                     </div>
                     <div>
@@ -167,26 +127,6 @@ export default class Profile extends Component {
                                     </Box>
                                 ) : <div>No experience information added yet.</div>
                             }
-                            {/* <Box extraClass="box-padding">
-                                <h2>Cloud Creative Limited</h2>
-                                <p className="vertical-flexbox"><BsPen className="list-items" />Software Support Engineer</p>
-                                <p className="vertical-flexbox"><GoCalendar className="list-items" />2021-Present</p>
-                            </Box>
-                            <Box extraClass="box-padding">
-                                <h2>Teaching</h2>
-                                <p className="vertical-flexbox"><BsPen className="list-items" />Students of O and A Levels</p>
-                                <p className="vertical-flexbox"><GoCalendar className="list-items" />2016-Present</p>
-                            </Box>
-                            <Box extraClass="box-padding">
-                                <h2>Personal Projects</h2>
-                                <p className="vertical-flexbox"><BsPen className="list-items" />Web Development, Machine Learning</p>
-                                <p className="vertical-flexbox"><GoCalendar className="list-items" />2014-Present</p>
-                            </Box>
-                            <Box extraClass="box-padding">
-                                <h2>Independent University, Bangladesh</h2>
-                                <p className="vertical-flexbox"><BsPen className="list-items" />Student on Duty</p>
-                                <p className="vertical-flexbox"><GoCalendar className="list-items" />2018-2019</p>
-                            </Box> */}
                         </GridBox>
                     </div>
                 </Box>
@@ -194,10 +134,3 @@ export default class Profile extends Component {
         )
     }
 }
-
-
-// const mapStateToProps = (state) => ({
-//     profileData: state.profile.profileData,
-// })
-
-// export default connect(mapStateToProps, { getProfileData })(Profile)

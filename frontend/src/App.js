@@ -14,6 +14,7 @@ import PrivateRoute from './components/PrivateRoute'
 import { loadUser } from './actions/auth'
 import ProfileEducation from './settings/ProfileEducation'
 import ProfileExperience from './settings/ProfileExperience'
+import Search from './pages/Search'
 
 export default class App extends Component {
     componentDidMount() {
@@ -87,6 +88,7 @@ class MainView extends Component {
                         <Route exact path="/profile/education" component={ProfileEducation} />
                         <Route exact path="/profile/experience" component={ProfileExperience} />
                         <Route exact path="/connections" component={Connections} />
+                        <Route exact path="/search" component={Search} />
                         <Route component={PageNotFound} />
                     </Switch>
                 </div>

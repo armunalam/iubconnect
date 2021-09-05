@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.forms.models import model_to_dict
 from knox.models import AuthToken
+from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.models import User
 from rest_framework.views import APIView
 from .models import Account, School, Department, UserEducation, UserExperience
@@ -185,6 +186,56 @@ class ExperienceViewSet(APIView):
     @classmethod
     def get_extra_actions(cls):
         return []
+
+
+class SearchViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        query = request.query_params.get('q')
+
+        search = Account.objects.annotate(
+            search=SearchVector('first_name',
+                                'last_name',
+                                'user__username',
+                                'department',
+                                'department__department_name',
+                                'user_type')
+        ).filter(search=query)
+
+        search = list(search.values('first_name',
+                                    'last_name',
+                                    'user__username',
+                                    'department',
+                                    'department__department_name',
+                                    'user_type'))
+
+        if (not search):
+            for query in query.split(' '):
+                search = Account.objects.annotate(
+                    search=SearchVector('first_name',
+                                        'last_name',
+                                        'user__username',
+                                        'department',
+                                        'department__department_name',
+                                        'user_type')
+                ).filter(search__icontains=query)
+
+                search = list(search.values('first_name',
+                                            'last_name',
+                                            'user__username',
+                                            'department',
+                                            'department__department_name',
+                                            'user_type'))
+                                            
+                if (search):
+                    break
+
+        return Response(search)
+
+    # @classmethod
+    # def get_extra_actions(cls):
+    #     return []
 
 
 class AccountAllViewSet(viewsets.ModelViewSet):
