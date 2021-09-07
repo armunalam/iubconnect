@@ -386,6 +386,13 @@ option {
     width: 100%;
 }
 
+.grid-four {
+    display: grid;
+    grid-template-columns: 0.6fr 1fr 1fr 1fr;
+    gap: 20px;
+    width: 100%;
+}
+
 .box-padding {
     padding: 25px;
     margin: 0px;
@@ -530,6 +537,12 @@ option {
     margin-top: 15px;
 }
 
+.login-success-message {
+    display: block;
+    color: var(--green);
+    margin-top: 15px;
+}
+
 .login-no-message {
     display: none;
 }
@@ -561,7 +574,7 @@ option {
     padding: 20px;
     /* text-align: center; */
     border: var(--border-dropdown);
-    width: 850px;
+    width: 80%; /* 850px; */
     box-shadow: 0rem 0rem 0.5rem rgba(0, 0, 0, 0.08);
 }
 
@@ -616,6 +629,12 @@ option {
 .edit-field {
     height: 40px;
     font-size: 18px;
+}
+
+.field-label {
+    padding: 15px 0px;
+    font-size: 25px;
+    text-align: right;
 }
 
 .edit-remove-button {
@@ -709,6 +728,12 @@ option {
     }
     .grid-three {
         grid-template-columns: 1fr;
+    }
+    .grid-four {
+        grid-template-columns: 1fr;
+    }
+    .field-label {
+        text-align: left;
     }
 }
 

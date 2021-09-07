@@ -5,7 +5,9 @@ from django.forms.models import model_to_dict
 from knox.models import AuthToken
 from django.contrib.postgres.search import SearchVector
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 from rest_framework.views import APIView
+import re
 from .models import Account, School, Department, UserEducation, UserExperience
 from .serializers import (AccountSerializer,
                           UserSerializer,
@@ -208,7 +210,6 @@ class SearchViewSet(APIView):
         if (not search):
             for query in query.split(' '):
                 search = search_query.filter(search__icontains=query)
-
                 if (search):
                     break
 
@@ -226,28 +227,114 @@ class UserProfileViewSet(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
+        username = request.query_params.get('username')
+
         account = Account.objects.filter(
-            user__username=request.query_params.get('username')
+            user__username=username
         ).values('first_name', 'last_name', 'user_type', 'gender').first()
-        print(account)
-        
+
         education = UserEducation.objects.filter(
-            user__username=request.query_params.get('username')
+            user__username=username
         ).values()
-        
+
         experience = UserExperience.objects.filter(
-            user__username=request.query_params.get('username')
+            user__username=username
         ).values()
-        
-        if (str(request.user) == request.query_params.get('username')):
+
+        if (str(request.user) == username):
             account['is_current_user'] = True
         else:
             account['is_current_user'] = False
-        
+
         account['education'] = education
         account['experience'] = experience
 
         return Response(account)
+
+
+class BasicInfoSettings(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        account = Account.objects.filter(user=request.user).values(
+            'id',
+            'user__username',
+            'first_name',
+            'last_name',
+            'iub_id_number',
+            'user__email',
+            'date_of_birth',
+            'gender',
+            'phone',
+            'address',
+            'user_type',
+            'department__department_id',
+        ).first()
+
+        dob = str(account.get('date_of_birth')).split('-')
+        try:
+            account['year'] = dob[0]
+            account['month'] = dob[1]
+            account['day'] = dob[2]
+        except Exception:
+            account['year'] = ''
+            account['month'] = ''
+            account['day'] = ''
+
+        return Response(account)
+
+    def post(self, request):
+        user = User.objects.get(username=request.user)
+        user.username = request.data.get('username')
+        user.email = request.data.get('email')
+        user.save()
+
+        account = Account.objects.get(user=request.user)
+        account.first_name = request.data.get('first_name')
+        account.last_name = request.data.get('last_name')
+        account.iub_id_number = request.data.get('iub_id_number')
+        account.date_of_birth = request.data.get('date_of_birth')
+        account.gender = request.data.get('gender')
+        account.phone = request.data.get('phone')
+        account.user_type = request.data.get('user_type')
+
+        department = Department.objects.get(
+            department_id=request.data.get('department'))
+        account.department = department
+
+        account.save()
+
+        return Response(model_to_dict(account))
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
+
+
+class PasswordSettings(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        user = authenticate(username=request.user.username,
+                            password=request.data.get('password'))
+        if user != request.user:
+            return Response({'auth': False, 'valid': True})
+
+        new_password = request.data.get('new_password')
+        if not (re.search('[0-9]', new_password)
+                and re.search('[a-z]', new_password)
+                and re.search('[A-z]', new_password)
+                and len(new_password) >= 8):
+            return Response({'auth': True, 'valid': False})
+
+        user.set_password(new_password)
+        user.save()
+
+        return Response({'auth': True, 'valid': True})
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
 
 
 class AccountAllViewSet(viewsets.ModelViewSet):

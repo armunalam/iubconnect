@@ -51,7 +51,7 @@ class AccountSerializer(serializers.ModelSerializer):
             first_name=val['first_name'],
             last_name=val['last_name'],
             iub_id_number=val['iub_id_number'],
-            # date_of_birth=val['date_of_birth'],
+            date_of_birth=val['date_of_birth'],
             gender=val['gender'],
             phone=val['phone'],
             # val['address'],

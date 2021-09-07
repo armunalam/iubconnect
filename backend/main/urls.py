@@ -14,7 +14,9 @@ from .api import (AccountViewSet, CustomViewSet,
                   EducationViewSet,
                   ExperienceViewSet,
                   SearchViewSet,
-                  UserProfileViewSet)
+                  UserProfileViewSet,
+                  BasicInfoSettings,
+                  PasswordSettings)
 
 router = routers.DefaultRouter()
 router.register('api/account', AccountViewSet, 'account')
@@ -37,4 +39,6 @@ urlpatterns += [
     path('api/experience', ExperienceViewSet.as_view()),
     path('api/search', SearchViewSet.as_view()),
     path('api/user', UserProfileViewSet.as_view()),
+    path('api/settings', BasicInfoSettings.as_view()),
+    path('api/passwordsettings', PasswordSettings.as_view()),
 ]
