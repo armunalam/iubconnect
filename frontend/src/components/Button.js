@@ -5,9 +5,12 @@ export default class Button extends Component {
         return (
             <div className={"button-component " + this.props.extraClass}
                 onClick={this.props.buttonClick}
-                id={this.props.idKey}>
+                id={this.props.idKey}
+                style={{
+                    userSelect: 'none'
+                }}>
                 {this.props.children}
-            </div>
+            </div >
         )
     }
 }

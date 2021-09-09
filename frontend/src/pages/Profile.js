@@ -41,6 +41,7 @@ export default class Profile extends Component {
                     user_type: res.data[0].user_type,
                     gender: res.data[0].gender,
                 })
+                document.title = `${this.state.name} | IUBConnect`
             })
             .catch((err) => console.log(err))
 

@@ -438,6 +438,21 @@ option {
     box-shadow: 0px 0px 0px 1px var(--red) inset;
 }
 
+.button-profile {
+    position: absolute;
+    display: block;
+    right: 40px;
+    transform: translateY(175px);
+    font-size: 20px;
+}
+
+.button-profile:hover {
+    color: var(--hover-text-color);
+    background-color: var(--hover-color);
+    box-shadow: 0px 0px 0px 1px var(--hover-color) inset;
+    
+}
+
 
 /* Profile */
 
@@ -734,6 +749,14 @@ option {
     }
     .field-label {
         text-align: left;
+    }
+    .button-profile {
+        position: relative;
+        display: inline-block;
+        transform: translateY(0px);
+        left: 0;
+        margin-left: auto;
+        margin-right: auto;
     }
 }
 

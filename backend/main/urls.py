@@ -1,8 +1,10 @@
 from django.urls import path, include
 from rest_framework import routers
 from knox import views as knox_views
-from .api import (AccountViewSet, CustomViewSet,
-                  UserViewSet,
+from .api import (AccountViewSet,
+                  ConnectViewSet,
+                  CustomViewSet,
+                  #   UserViewSet,
                   SchoolViewSet,
                   UserAPI,
                   RegisterAPI,
@@ -16,7 +18,8 @@ from .api import (AccountViewSet, CustomViewSet,
                   SearchViewSet,
                   UserProfileViewSet,
                   BasicInfoSettings,
-                  PasswordSettings)
+                  PasswordSettings,
+                  ConnectionListViewSet)
 
 router = routers.DefaultRouter()
 router.register('api/account', AccountViewSet, 'account')
@@ -33,7 +36,7 @@ urlpatterns += [
     path('api/auth/register', RegisterAPI.as_view()),
     path('api/auth/login', LoginAPI.as_view()),
     path('api/auth/logout', knox_views.LogoutView.as_view(), name='knox_logout'),
-    
+
     path('api/customview', CustomViewSet.as_view()),
     path('api/education', EducationViewSet.as_view()),
     path('api/experience', ExperienceViewSet.as_view()),
@@ -41,4 +44,6 @@ urlpatterns += [
     path('api/user', UserProfileViewSet.as_view()),
     path('api/settings', BasicInfoSettings.as_view()),
     path('api/passwordsettings', PasswordSettings.as_view()),
+    path('api/connect', ConnectViewSet.as_view()),
+    path('api/getconnectionlist', ConnectionListViewSet.as_view()),
 ]

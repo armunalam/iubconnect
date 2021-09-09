@@ -13,6 +13,8 @@ export default class Dashboard extends Component {
     }
 
     componentDidMount() {
+        document.title = 'Dashboard | IUBConnect'
+        
         const token = window.localStorage['token']
         const config = {
             headers: {

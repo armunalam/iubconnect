@@ -14,6 +14,8 @@ function ProfileEducation() {
     const [redirect, setRedirect] = useState(false)
 
     useEffect(() => {
+        document.title = 'Edit Education | IUBConnect'
+        
         const token = window.localStorage['token']
         const config = {
             headers: {

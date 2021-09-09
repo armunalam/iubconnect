@@ -60,11 +60,13 @@ class Connection(models.Model):
         User, on_delete=models.CASCADE, related_name='user')
     connected_user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='connected_user')
+    requested_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='requested_by', null=True)
     STATUS_OPTIONS = (
-        ('p', 'Pending'),
-        ('c', 'Connected'),
+        ('Requested', 'Requested'),
+        ('Connected', 'Connected'),
     )
-    status = models.CharField(max_length=1, choices=STATUS_OPTIONS)
+    status = models.CharField(max_length=9, choices=STATUS_OPTIONS)
 
     class Meta:
         unique_together = ('user', 'connected_user')

@@ -40,6 +40,8 @@ function Settings() {
     const messagePasswordFail = useRef()
 
     useEffect(() => {
+        document.title = 'Settings | IUBConnect'
+        
         // Date of birth selectors
         const bDay = []
         const bMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']

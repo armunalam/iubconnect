@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 import re
-from .models import Account, School, Department, UserEducation, UserExperience
+from .models import Account, Connection, School, Department, UserEducation, UserExperience
 from .serializers import (AccountSerializer,
                           UserSerializer,
                           SchoolSerializer,
@@ -231,7 +231,7 @@ class UserProfileViewSet(APIView):
 
         account = Account.objects.filter(
             user__username=username
-        ).values('first_name', 'last_name', 'user_type', 'gender').first()
+        ).values('user__username', 'first_name', 'last_name', 'user_type', 'gender').first()
 
         education = UserEducation.objects.filter(
             user__username=username
@@ -323,7 +323,7 @@ class PasswordSettings(APIView):
         new_password = request.data.get('new_password')
         if not (re.search('[0-9]', new_password)
                 and re.search('[a-z]', new_password)
-                and re.search('[A-z]', new_password)
+                and re.search('[A-Z]', new_password)
                 and len(new_password) >= 8):
             return Response({'auth': True, 'valid': False})
 
@@ -335,6 +335,92 @@ class PasswordSettings(APIView):
     @classmethod
     def get_extra_actions(cls):
         return []
+
+
+class ConnectViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        if (request.query_params.get('username')):
+            try:
+                connection = Connection.objects.get(
+                    user=request.user,
+                    connected_user__username=request.query_params.get('username'))
+                is_connected = connection.status
+                self_requested = True if connection.requested_by == request.user else False
+            except Connection.DoesNotExist:
+                is_connected = 'Not Connected'
+                self_requested = False
+            return Response({'connection_status': is_connected, 'self_requested': self_requested})
+        else:
+            connections = list(Connection.objects.filter(
+                user=request.user).values())
+            return Response(connections)
+
+    def post(self, request):
+        user = request.user
+        user_to_connect = user_connected = User.objects.get(
+            username=request.data.get('username'))
+
+        if request.data.get('type') == 'connect':
+            Connection(user=user,
+                       connected_user=user_to_connect,
+                       status='Requested',
+                       requested_by=user).save()
+            Connection(user=user_to_connect,
+                       connected_user=user,
+                       status='Requested',
+                       requested_by=user).save()
+            return Response({'status': 'requested'})
+        elif request.data.get('type') == 'accept':
+            connection = Connection.objects.get(
+                user=user, connected_user=user_connected)
+            if connection.requested_by != request.user:
+                connection.status = 'Connected'
+                connection.save()
+                connection = Connection.objects.get(
+                    user=user_connected, connected_user=user)
+                connection.status = 'Connected'
+                connection.save()
+                return Response({'status': 'accepted'})
+            else:
+                return Response({'status': 'failed'})
+        elif request.data.get('type') == 'disconnect':
+            connection = Connection.objects.get(
+                user=user, connected_user=user_connected)
+            connection.delete()
+            connection = Connection.objects.get(
+                user=user_connected, connected_user=user)
+            connection.delete()
+            return Response({'status': 'disconnected'})
+        else:
+            return Response({'status': 'failed'})
+
+    @classmethod
+    def get_extra_actions(cls):
+        return []
+
+
+class ConnectionListViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        connections = list(Connection.objects.filter(
+            user=request.user, status='Connected').values('connected_user'))
+        accounts = []
+
+        for item in connections:
+            accounts.append(
+                Account.objects.filter(user=item.get('connected_user')).values(
+                    'user__username',
+                    'first_name',
+                    'last_name',
+                    'department__department_name',
+                    'user_type',
+                ).first()
+            )
+
+        return Response(accounts)
 
 
 class AccountAllViewSet(viewsets.ModelViewSet):

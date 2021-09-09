@@ -14,8 +14,12 @@ import { Link } from 'react-router-dom'
 
 function UserProfile({ match }) {
     const [name, setName] = useState('')
+    const [username, setUsername] = useState(match.params.username)
     const [userType, setUserType] = useState('')
     const [gender, setGender] = useState('')
+    const [connectionStatus, setConnectionStatus] = useState('')
+    const [connectionStatusButton, setConnectionStatusButton] = useState('')
+    const [selfRequested, setSelfRequested] = useState(true)
     const [education, setEducation] = useState([])
     const [experience, setExperience] = useState([])
     const [isCurrentUser, setIsCurrentUser] = useState(false)
@@ -37,17 +41,92 @@ function UserProfile({ match }) {
                 const response = await axios.get(`${API_URL}/user`, config)
                 setIsCurrentUser(response.data.is_current_user)
                 setName(`${response.data.first_name} ${response.data.last_name}`)
+                setUsername(response.data.user__username)
                 setUserType(response.data.user_type)
                 setGender(response.data.gender)
                 setEducation(response.data.education)
                 setExperience(response.data.experience)
+                document.title = `${response.data.first_name} ${response.data.last_name} | IUBConnect`
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        const fetchConnectionData = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/connect`, config)
+                const status = response.data.connection_status
+                const selfReq = response.data.self_requested
+                setConnectionStatus(status)
+                setSelfRequested(response.data.self_requested)
+                if (status === 'Connected') {
+                    setConnectionStatusButton('Disconnect')
+                } else if (status === 'Requested' && selfReq) {
+                    setConnectionStatusButton('Cancel Request')
+                } else if (status === 'Requested' && !selfReq) {
+                    setConnectionStatusButton('Confirm Request')
+                } else {
+                    setConnectionStatusButton('Connect')
+                }
             } catch (error) {
                 console.error(error)
             }
         }
 
         fetchData()
+        fetchConnectionData()
     }, [])
+
+    const handleConnectionClick = (e) => {
+        e.preventDefault()
+        
+        const token = window.localStorage['token']
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            },
+        }
+
+        const postData = async () => {
+            // if (connectionStatus === 'Connected') {
+            //     const response = await axios.post(`${API_URL}/connect`, {
+                    
+            //     }, config)
+            console.log('Okay')
+            if (connectionStatus === 'Not Connected') {
+                const response = await axios.post(`${API_URL}/connect`, {
+                    username: username,
+                    type: 'connect'
+                }, config)
+                if (response.data.status === 'requested') {
+                    setConnectionStatus('Requested')
+                    setConnectionStatusButton('Cancel Request')
+                    setSelfRequested(true)
+                }
+            } else if (connectionStatus === 'Requested' && !selfRequested) {
+                const response = await axios.post(`${API_URL}/connect`, {
+                    username: username,
+                    type: 'accept'
+                }, config)
+                if (response.data.status === 'accepted') {
+                    setConnectionStatus('Connected')
+                    setConnectionStatusButton('Disconnect')
+                }
+            } else {
+                const response = await axios.post(`${API_URL}/connect`, {
+                    username: username,
+                    type: 'disconnect'
+                }, config)
+                if (response.data.status === 'disconnected') {
+                    setConnectionStatus('Not Connected')
+                    setConnectionStatusButton('Connect')
+                }
+            }
+        }
+        
+        postData()
+    }
 
     if (isCurrentUser)
         return <Redirect to="/profile" />
@@ -63,9 +142,11 @@ function UserProfile({ match }) {
                     </div>
                     <div>
                         <h1 id="profile-main-title">{name}</h1>
-                        <h2 id="profile-sub-title">{userType}</h2>
+                        <h2 id="profile-sub-title">{userType} | {connectionStatus}</h2>
                     </div>
                 </div>
+                <Button extraClass=" button-profile"
+                    buttonClick={handleConnectionClick} >{connectionStatusButton}</Button>
             </Box>
             <Box extraClass="main-box">
                 <div>

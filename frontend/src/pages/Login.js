@@ -12,6 +12,10 @@ export class Login extends Component {
         this.authField1 = createRef()
         this.authField2 = createRef()
     }
+    
+    componentDidMount() {
+        document.title = 'Login | IUBConnect'
+    }
 
     state = {
         username: '',

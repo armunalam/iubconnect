@@ -14,6 +14,8 @@ function ProfileExperience() {
     const [redirect, setRedirect] = useState(false)
 
     useEffect(() => {
+        document.title = 'Edit Experience | IUBConnect'
+        
         const token = window.localStorage['token']
         const config = {
             headers: {

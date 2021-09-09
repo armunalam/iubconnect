@@ -9,9 +9,12 @@ import { BsFillPersonLinesFill, BsBuilding } from 'react-icons/bs'
 
 function Search({ match, location }) {
     const [search, setSearch] = useState([])
+    const [isEmpty, setIsEmpty] = useState(true)
     const searchParam = qs.parse(location.search)
 
     useEffect(() => {
+        document.title = 'Search Results | IUBConnect'
+        
         const token = window.localStorage['token']
         const config = {
             headers: {
@@ -27,6 +30,7 @@ function Search({ match, location }) {
             try {
                 const response = await axios.get(`${API_URL}/search`, config)
                 setSearch(response.data)
+                setIsEmpty(false)
                 console.log(response.data)
             } catch (error) {
                 console.error(error)
@@ -40,22 +44,26 @@ function Search({ match, location }) {
         <div className='main-body-margin'>
             <Box extraClass="main-box">
                 <div>
-                    {search.length == 0 ?
-                        <div>
-                            <h1 style={{ margin: '0px' }}
-                            >Sorry, no match found for "{
-                                    searchParam.q
-                                }" 😞</h1>
-                            <p>Please try again using a different keyword.</p></div> :
-                        <div>
-                            <h1>
-                                {search.length !== 1 ?
-                                    'Search Results' : 'Search Result'
-                                } for "{searchParam.q}"
-                            </h1>
-                            <p>Found {search.length} {search.length !== 1 ?
-                                'results' : 'result'
-                            }.</p>
+                    {isEmpty ?
+                        <div></div> : <div>
+                            {search.length == 0 ?
+                                <div>
+                                    <h1 style={{ margin: '0px' }}
+                                    >Sorry, no match found for "{
+                                            searchParam.q
+                                        }" 😞</h1>
+                                    <p>Please try again using a different keyword.</p></div> :
+                                <div>
+                                    <h1>
+                                        {search.length !== 1 ?
+                                            'Search Results' : 'Search Result'
+                                        } for "{searchParam.q}"
+                                    </h1>
+                                    <p>Found {search.length} {search.length !== 1 ?
+                                        'results' : 'result'
+                                    }.</p>
+                                </div>
+                            }
                         </div>
                     }
                 </div>
