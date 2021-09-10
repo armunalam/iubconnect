@@ -41,11 +41,6 @@ class LoginSerializer(serializers.Serializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    department_name = serializers.CharField(
-        source='department.department_name')
-    email = serializers.CharField(
-        source='user.email')
-    
     class Meta:
         model = Account
         fields = '__all__'
@@ -59,7 +54,6 @@ class AccountSerializer(serializers.ModelSerializer):
             date_of_birth=val['date_of_birth'],
             gender=val['gender'],
             phone=val['phone'],
-            # val['address'],
             user_type=val['user_type'],
             department=val['department'],
         )

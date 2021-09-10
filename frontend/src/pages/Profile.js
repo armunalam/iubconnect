@@ -45,10 +45,8 @@ export default class Profile extends Component {
                     name: `${res.data[0].first_name} ${res.data[0].last_name}`,
                     user_type: res.data[0].user_type,
                     gender: res.data[0].gender,
-                    department: res.data[0].department_name,
                     iub_id_number: res.data[0].iub_id_number,
                     phone: res.data[0].phone,
-                    email: res.data[0].email,
                     date_of_birth: res.data[0].date_of_birth
                 })
                 document.title = `${this.state.name} | IUBConnect`
@@ -67,6 +65,16 @@ export default class Profile extends Component {
             try {
                 const response = await axios.get(`${API_URL}/experience`, config)
                 this.setState({ experience: response.data })
+            } catch (error) {
+                console.error(error)
+            }
+
+            try {
+                const response = await axios.get(`${API_URL}/getaccountdept`, config)
+                this.setState({
+                    email: response.data.email,
+                    department: response.data.department
+                })
             } catch (error) {
                 console.error(error)
             }

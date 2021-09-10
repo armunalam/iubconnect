@@ -507,6 +507,16 @@ class SuggestPeopleViewSet(APIView):
         return Response(list(accounts))
 
 
+class GetAccountEmailDept(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        account = Account.objects.get(user=request.user)
+
+        return Response({'email': account.user.email,
+                         'department': account.department.department_name})
+
+
 class AccountAllViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
 
