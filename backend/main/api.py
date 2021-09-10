@@ -238,25 +238,25 @@ class UserProfileViewSet(APIView):
             account = Account.objects.filter(
                 user__username=username
             ).values('user__username',
-                    'first_name',
-                    'last_name',
-                    'user_type',
-                    'gender',
-                    'iub_id_number',
-                    'date_of_birth',
-                    'department__department_name',
-                    'phone',
-                    'user__email').first()
+                     'first_name',
+                     'last_name',
+                     'user_type',
+                     'gender',
+                     'iub_id_number',
+                     'date_of_birth',
+                     'department__department_name',
+                     'phone',
+                     'user__email').first()
             account['is_connected'] = True
         else:
             account = Account.objects.filter(
                 user__username=username
             ).values('user__username',
-                    'first_name',
-                    'last_name',
-                    'user_type',
-                    'gender',
-                    'department__department_name').first()
+                     'first_name',
+                     'last_name',
+                     'user_type',
+                     'gender',
+                     'department__department_name').first()
             account['is_connected'] = False
 
         education = UserEducation.objects.filter(
@@ -487,19 +487,20 @@ class SuggestPeopleViewSet(APIView):
             return Response([])
 
         try:
-            accounts = Account.objects.all()
+            accounts = Account.objects.all().order_by('?').exclude(
+                user=request.user
+            )
             for user in users:
                 accounts = accounts.exclude(
-                    user=request.user
-                ).exclude(
                     user=user.get('connected_user')
-                ).order_by('?')[:6].values(
-                    'user__username',
-                    'first_name',
-                    'last_name',
-                    'department__department_name',
-                    'user_type',
                 )
+            accounts = accounts.values(
+                'user__username',
+                'first_name',
+                'last_name',
+                'department__department_name',
+                'user_type',
+            )[:6]
         except Account.DoesNotExist:
             return Response([])
 
