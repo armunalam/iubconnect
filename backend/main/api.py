@@ -450,6 +450,36 @@ class RequestedListViewSet(APIView):
         return Response(accounts)
 
 
+class SuggestPeopleViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        try:
+            users = list(Connection.objects.filter(
+                user=request.user).values('connected_user'))
+        except Connection.DoesNotExist:
+            return Response([])
+
+        try:
+            accounts = Account.objects.all()
+            for user in users:
+                accounts = accounts.exclude(
+                    user=request.user
+                ).exclude(
+                    user=user.get('connected_user')
+                ).order_by('?')[:6].values(
+                    'user__username',
+                    'first_name',
+                    'last_name',
+                    'department__department_name',
+                    'user_type',
+                )
+        except Account.DoesNotExist:
+            return Response([])
+
+        return Response(list(accounts))
+
+
 class AccountAllViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
 

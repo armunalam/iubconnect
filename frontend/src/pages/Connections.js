@@ -61,7 +61,6 @@ export default function Connections() {
                     <h2 style={{
                         fontWeight: 'normal',
                         marginTop: '-15px',
-                        // textAlign: 'center',
                         color: '#666666'
                     }}>You have no connection yet.</h2>}
             </Box>

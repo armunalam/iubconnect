@@ -13,7 +13,9 @@ export default class Dashboard extends Component {
         user_type: '',
         requestedUsers: [],
         btnName: [],
-        empty: false
+        empty: false,
+        suggestedEmpty: false,
+        suggestedUsers: []
     }
 
     componentDidMount() {
@@ -54,7 +56,19 @@ export default class Dashboard extends Component {
             }
         }
 
+        const fetchSuggestedData = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/suggest`, config)
+                this.setState({ suggestedUsers: response.data })
+                if (response.data.length === 0) this.setState({ suggestedEmpty: true })
+                else this.setState({ suggestedEmpty: false })
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
         fetchRequestedData()
+        fetchSuggestedData()
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -184,7 +198,31 @@ export default class Dashboard extends Component {
                 </Box>
                 <Box extraClass="main-box">
                     <h1>People You May Know</h1>
-                    <GridBox>
+                    {!this.state.suggestedEmpty ? (
+                        <GridBox>
+                            {this.state.suggestedUsers.map(({ first_name, last_name, user_type, department__department_name, user__username }) =>
+                                <Link to={`/user/${user__username}`}>
+                                    <Box extraClass="box-padding box-button">
+                                        <h2>{`${first_name} ${last_name}`}</h2>
+                                        <p className="vertical-flexbox">
+                                            <BsFillPersonLinesFill className="list-items" />
+                                            {user_type}
+                                        </p>
+                                        <p className="vertical-flexbox">
+                                            <BsBuilding className="list-items" />
+                                            {department__department_name}
+                                        </p>
+                                    </Box>
+                                </Link>
+                            )}
+                        </GridBox>
+                    ) :
+                        <h2 style={{
+                            fontWeight: 'normal',
+                            marginTop: '-15px',
+                            color: '#666666'
+                        }}>Sorry, we have no suggestion for you at the moment.</h2>}
+                    {/* <GridBox>
                         <Box extraClass="box-padding">
                             <h2>Yasir Arafat Diganta</h2>
                             <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Student</p>
@@ -209,7 +247,7 @@ export default class Dashboard extends Component {
                             <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
                             <Button extraClass="button-green">Connect</Button>
                         </Box>
-                    </GridBox>
+                    </GridBox> */}
                 </Box>
             </div>
         )
