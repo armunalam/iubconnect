@@ -7,16 +7,25 @@ import GridBox from '../components/GridBox'
 import Button from '../components/Button'
 import { IoMdSchool } from 'react-icons/io'
 import { GoCalendar } from 'react-icons/go'
+import { HiOutlineIdentification } from 'react-icons/hi'
+import { BsBuilding } from 'react-icons/bs'
+import { FaGenderless, FaBirthdayCake } from 'react-icons/fa'
+import { FiPhoneCall, FiMail } from 'react-icons/fi'
 import { BsPen } from 'react-icons/bs'
 import male_avatar from '../assets/male_avatar.png'
 import female_avatar from '../assets/female_avatar.png'
-import { Link } from 'react-router-dom'
 
 function UserProfile({ match }) {
     const [name, setName] = useState('')
     const [username, setUsername] = useState(match.params.username)
     const [userType, setUserType] = useState('')
     const [gender, setGender] = useState('')
+    const [phone, setPhone] = useState('')
+    const [email, setEmail] = useState('')
+    const [iub_id_number, setIubIdNumber] = useState('')
+    const [department, setDepartment] = useState('')
+    const [date_of_birth, setDateOfBirth] = useState('')
+    const [isConnected, setIsConnected] = useState(false)
     const [connectionStatus, setConnectionStatus] = useState('')
     const [connectionStatusButton, setConnectionStatusButton] = useState('')
     const [selfRequested, setSelfRequested] = useState(true)
@@ -46,6 +55,15 @@ function UserProfile({ match }) {
                 setGender(response.data.gender)
                 setEducation(response.data.education)
                 setExperience(response.data.experience)
+                setIsConnected(response.data.is_connected)
+                if (response.data.is_connected === true) {
+                    setPhone(response.data.phone)
+                    setEmail(response.data.user__email)
+                    setIubIdNumber(response.data.iub_id_number)
+                    setDepartment(response.data.department__department_name)
+                    setDateOfBirth(response.data.date_of_birth)
+                }
+
                 document.title = `${response.data.first_name} ${response.data.last_name} | IUBConnect`
             } catch (error) {
                 console.error(error)
@@ -199,6 +217,42 @@ function UserProfile({ match }) {
                     </GridBox>
                 </div>
             </Box>
+            {isConnected ?
+                <Box extraClass="main-box">
+                    <h1 style={{ marginBottom: '0px' }}>Personal Information</h1>
+                    <GridBox>
+                        <Box extraClass="box-padding">
+                            <h2>Basic Information</h2>
+                            <p className="vertical-flexbox">
+                                <HiOutlineIdentification className="list-items" />
+                                <span className="bold-text">IUB ID Number:</span> {iub_id_number}
+                            </p>
+                            <p className="vertical-flexbox">
+                                <FaGenderless className="list-items" />
+                                <span className="bold-text">Gender:</span> {gender}
+                            </p>
+                            <p className="vertical-flexbox">
+                                <FaBirthdayCake className="list-items" />
+                                <span className="bold-text">Date of Birth:</span> {date_of_birth}
+                            </p>
+                        </Box>
+                        <Box extraClass="box-padding">
+                            <h2>Contact Information</h2>
+                            <p className="vertical-flexbox">
+                                <FiPhoneCall className="list-items" />
+                                <span className="bold-text">Phone:</span> {phone}
+                            </p>
+                            <p className="vertical-flexbox">
+                                <FiMail className="list-items" />
+                                <span className="bold-text">Email:</span> {email}
+                            </p>
+                            <p className="vertical-flexbox">
+                                <BsBuilding className="list-items" />
+                                <span className="bold-text">Department:</span> {department}
+                            </p>
+                        </Box>
+                    </GridBox>
+                </Box> : <div style={{ display: 'none' }}></div>}
         </div>
     )
 }

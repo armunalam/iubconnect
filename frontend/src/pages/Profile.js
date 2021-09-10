@@ -6,6 +6,10 @@ import GridBox from '../components/GridBox'
 import Button from '../components/Button'
 import { IoMdSchool } from 'react-icons/io'
 import { GoCalendar } from 'react-icons/go'
+import { HiOutlineIdentification } from 'react-icons/hi'
+import { BsBuilding } from 'react-icons/bs'
+import { FaGenderless, FaBirthdayCake } from 'react-icons/fa'
+import { FiPhoneCall, FiMail } from 'react-icons/fi'
 import { BsPen } from 'react-icons/bs'
 import male_avatar from '../assets/male_avatar.png'
 import female_avatar from '../assets/female_avatar.png'
@@ -18,7 +22,8 @@ export default class Profile extends Component {
         date_of_birth: '',
         gender: '',
         phone: '',
-        address: '',
+        email: '',
+        iub_id_number: '',
         department: '',
         education: [],
         experience: [],
@@ -40,6 +45,11 @@ export default class Profile extends Component {
                     name: `${res.data[0].first_name} ${res.data[0].last_name}`,
                     user_type: res.data[0].user_type,
                     gender: res.data[0].gender,
+                    department: res.data[0].department_name,
+                    iub_id_number: res.data[0].iub_id_number,
+                    phone: res.data[0].phone,
+                    email: res.data[0].email,
+                    date_of_birth: res.data[0].date_of_birth
                 })
                 document.title = `${this.state.name} | IUBConnect`
             })
@@ -140,6 +150,41 @@ export default class Profile extends Component {
                             }
                         </GridBox>
                     </div>
+                </Box>
+                <Box extraClass="main-box">
+                    <h1 style={{ marginBottom: '0px' }}>Personal Information</h1>
+                    <GridBox>
+                        <Box extraClass="box-padding">
+                            <h2>Basic Information</h2>
+                            <p className="vertical-flexbox">
+                                <HiOutlineIdentification className="list-items" />
+                                <span className="bold-text">IUB ID Number:</span> {this.state.iub_id_number}
+                            </p>
+                            <p className="vertical-flexbox">
+                                <FaGenderless className="list-items" />
+                                <span className="bold-text">Gender:</span> {this.state.gender}
+                            </p>
+                            <p className="vertical-flexbox">
+                                <FaBirthdayCake className="list-items" />
+                                <span className="bold-text">Date of Birth:</span> {this.state.date_of_birth}
+                            </p>
+                        </Box>
+                        <Box extraClass="box-padding">
+                            <h2>Contact Information</h2>
+                            <p className="vertical-flexbox">
+                                <FiPhoneCall className="list-items" />
+                                <span className="bold-text">Phone:</span> {this.state.phone}
+                            </p>
+                            <p className="vertical-flexbox">
+                                <FiMail className="list-items" />
+                                <span className="bold-text">Email:</span> {this.state.email}
+                            </p>
+                            <p className="vertical-flexbox">
+                                <BsBuilding className="list-items" />
+                                <span className="bold-text">Department:</span> {this.state.department}
+                            </p>
+                        </Box>
+                    </GridBox>
                 </Box>
             </div>
         )

@@ -78,6 +78,11 @@ option {
     display: none;
 }
 
+.bold-text {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
 
 /* Navigation Bar */
 

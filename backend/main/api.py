@@ -229,9 +229,35 @@ class UserProfileViewSet(APIView):
     def get(self, request):
         username = request.query_params.get('username')
 
-        account = Account.objects.filter(
-            user__username=username
-        ).values('user__username', 'first_name', 'last_name', 'user_type', 'gender').first()
+        try:
+            connection = Connection.objects.get(
+                user=request.user, connected_user__username=username)
+        except Connection.DoesNotExist:
+            connection = None
+        if connection and connection.status == 'Connected':
+            account = Account.objects.filter(
+                user__username=username
+            ).values('user__username',
+                    'first_name',
+                    'last_name',
+                    'user_type',
+                    'gender',
+                    'iub_id_number',
+                    'date_of_birth',
+                    'department__department_name',
+                    'phone',
+                    'user__email').first()
+            account['is_connected'] = True
+        else:
+            account = Account.objects.filter(
+                user__username=username
+            ).values('user__username',
+                    'first_name',
+                    'last_name',
+                    'user_type',
+                    'gender',
+                    'department__department_name').first()
+            account['is_connected'] = False
 
         education = UserEducation.objects.filter(
             user__username=username

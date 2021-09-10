@@ -222,32 +222,6 @@ export default class Dashboard extends Component {
                             marginTop: '-15px',
                             color: '#666666'
                         }}>Sorry, we have no suggestion for you at the moment.</h2>}
-                    {/* <GridBox>
-                        <Box extraClass="box-padding">
-                            <h2>Yasir Arafat Diganta</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Student</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
-                            <Button extraClass="button-green">Connect</Button>
-                        </Box>
-                        <Box extraClass="box-padding">
-                            <h2>Rajdeep Das</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Student</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
-                            <Button extraClass="button-green">Connect</Button>
-                        </Box>
-                        <Box extraClass="box-padding">
-                            <h2>Adnan Alam</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Alumnus</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
-                            <Button extraClass="button-green">Connect</Button>
-                        </Box>
-                        <Box extraClass="box-padding">
-                            <h2>Bushra Jahangir</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Student</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
-                            <Button extraClass="button-green">Connect</Button>
-                        </Box>
-                    </GridBox> */}
                 </Box>
             </div>
         )

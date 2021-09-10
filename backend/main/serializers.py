@@ -41,6 +41,11 @@ class LoginSerializer(serializers.Serializer):
 
 
 class AccountSerializer(serializers.ModelSerializer):
+    department_name = serializers.CharField(
+        source='department.department_name')
+    email = serializers.CharField(
+        source='user.email')
+    
     class Meta:
         model = Account
         fields = '__all__'
