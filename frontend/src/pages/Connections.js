@@ -57,7 +57,13 @@ export default function Connections() {
                             </Link>
                         )}
                     </GridBox>
-                ) : <h2>You have no connection yet.</h2>}
+                ) :
+                    <h2 style={{
+                        fontWeight: 'normal',
+                        marginTop: '-15px',
+                        // textAlign: 'center',
+                        color: '#666666'
+                    }}>You have no connection yet.</h2>}
             </Box>
         </div>
     )

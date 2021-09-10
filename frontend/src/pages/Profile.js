@@ -103,7 +103,12 @@ export default class Profile extends Component {
                                             {item.year}
                                         </p>
                                     </Box>
-                                ) : <div>No education information added yet.</div>
+                                ) :
+                                <h2 style={{
+                                    fontWeight: 'normal',
+                                    marginTop: '-5px',
+                                    color: '#666666'
+                                }}>No education information added yet.</h2>
                             }
                         </GridBox>
                     </div>
@@ -126,7 +131,12 @@ export default class Profile extends Component {
                                             {item.year}
                                         </p>
                                     </Box>
-                                ) : <div>No experience information added yet.</div>
+                                ) :
+                                <h2 style={{
+                                    fontWeight: 'normal',
+                                    marginTop: '-5px',
+                                    color: '#666666'
+                                }}>No experience information added yet.</h2>
                             }
                         </GridBox>
                     </div>

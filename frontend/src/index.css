@@ -74,6 +74,10 @@ option {
     color: black;
 }
 
+.display-none {
+    display: none;
+}
+
 
 /* Navigation Bar */
 

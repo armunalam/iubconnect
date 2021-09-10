@@ -423,6 +423,33 @@ class ConnectionListViewSet(APIView):
         return Response(accounts)
 
 
+class RequestedListViewSet(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        connections = list(
+            Connection.objects.filter(
+                user=request.user,
+                status='Requested').exclude(
+                    requested_by=request.user
+            ).values('connected_user')
+        )
+        accounts = []
+
+        for item in connections:
+            accounts.append(
+                Account.objects.filter(user=item.get('connected_user')).values(
+                    'user__username',
+                    'first_name',
+                    'last_name',
+                    'department__department_name',
+                    'user_type',
+                ).first()
+            )
+
+        return Response(accounts)
+
+
 class AccountAllViewSet(viewsets.ModelViewSet):
     queryset = Account.objects.all()
 

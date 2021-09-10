@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import axios from 'axios'
 import API_URL from '../urls'
 import Box from '../components/Box'
@@ -10,11 +11,14 @@ export default class Dashboard extends Component {
     state = {
         name: '',
         user_type: '',
+        requestedUsers: [],
+        btnName: [],
+        empty: false
     }
 
     componentDidMount() {
         document.title = 'Dashboard | IUBConnect'
-        
+
         const token = window.localStorage['token']
         const config = {
             headers: {
@@ -32,6 +36,104 @@ export default class Dashboard extends Component {
                 })
             })
             .catch((err) => console.log(err))
+
+        const fetchRequestedData = async () => {
+            try {
+                const response = await axios.get(`${API_URL}/getrequestedlist`, config)
+                this.setState({ requestedUsers: response.data })
+                if (response.data.length === 0) this.setState({ empty: true })
+                else this.setState({ empty: false })
+                const arr = []
+                for (let i = 0; i < response.data.length; i++) {
+                    arr.push('Remove')
+                }
+                this.setState({ btnName: arr })
+            } catch (error) {
+                this.setState({ empty: true })
+                console.error(error)
+            }
+        }
+
+        fetchRequestedData()
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.requestedUsers !== prevState.requestedUsers) {
+            console.log(this.state.requestedUsers.length)
+            if (this.state.requestedUsers.length === 0)
+                this.setState({ empty: true })
+        }
+    }
+
+    handleConfirmButton = (e) => {
+        e.preventDefault()
+
+        const username = this.state.requestedUsers[parseInt(e.target.id)].user__username
+
+        const token = window.localStorage['token']
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            },
+        }
+
+        const postData = async () => {
+            try {
+                const response = await axios.post(`${API_URL}/connect`, {
+                    username: username,
+                    type: 'accept'
+                }, config)
+                if (response.data.status === 'accepted') {
+                    const arr = []
+                    for (let i = 0; i < this.state.btnName.length; i++) {
+                        if (i === parseInt(e.target.id)) {
+                            arr.push('Disconnect')
+                        } else {
+                            arr.push(this.state.btnName[i])
+                        }
+                    }
+                    this.setState({ btnName: arr })
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        postData()
+    }
+
+    handleRemoveButton = (e) => {
+        e.preventDefault()
+        const id = parseInt(e.target.id.slice(1))
+        const username = this.state.requestedUsers[id].user__username
+
+        const token = window.localStorage['token']
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Token ${token}`
+            },
+        }
+
+        const postData = async () => {
+            try {
+                const response = await axios.post(`${API_URL}/connect`, {
+                    username: username,
+                    type: 'disconnect'
+                }, config)
+                if (response.data.status === 'disconnected') {
+                    const arr = this.state.requestedUsers.filter((item, index) => index !== id)
+                    this.setState({ requestedUsers: arr })
+                    const btnArr = this.state.btnName.filter((item, index) => index !== id)
+                    this.setState({ btnName: btnArr })
+                }
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        postData()
     }
 
     render() {
@@ -49,50 +151,36 @@ export default class Dashboard extends Component {
                 </Box>
                 <Box extraClass="main-box">
                     <h1>Connection Requests</h1>
-                    <GridBox>
-                        <Box extraClass="box-padding">
-                            <h2>Sadia Khan</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Student</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
-                            <Button extraClass="button-green">Confirm</Button>
-                            <Button extraClass="button-red">Remove</Button>
-                        </Box>
-                        <Box extraClass="box-padding">
-                            <h2>Samsul Amin</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Student</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
-                            <Button extraClass="button-green">Confirm</Button>
-                            <Button extraClass="button-red">Remove</Button>
-                        </Box>
-                        <Box extraClass="box-padding">
-                            <h2>Writban Alim</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Alumnus</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
-                            <Button extraClass="button-green">Confirm</Button>
-                            <Button extraClass="button-red">Remove</Button>
-                        </Box>
-                        <Box extraClass="box-padding">
-                            <h2>Mir Sayad Bin Almas</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Student</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Economics</p>
-                            <Button extraClass="button-green">Confirm</Button>
-                            <Button extraClass="button-red">Remove</Button>
-                        </Box>
-                        <Box extraClass="box-padding">
-                            <h2>Sabrina Masum</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Faculty</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Computer Science and Engineering</p>
-                            <Button extraClass="button-green">Confirm</Button>
-                            <Button extraClass="button-red">Remove</Button>
-                        </Box>
-                        <Box extraClass="box-padding">
-                            <h2>Zafore Sadek</h2>
-                            <p className="vertical-flexbox"><BsFillPersonLinesFill className="list-items" />Student</p>
-                            <p className="vertical-flexbox"><BsBuilding className="list-items" />Marketing</p>
-                            <Button extraClass="button-green">Confirm</Button>
-                            <Button extraClass="button-red">Remove</Button>
-                        </Box>
-                    </GridBox>
+                    {!this.state.empty ? (
+                        <GridBox>
+                            {this.state.requestedUsers.map(({ first_name, last_name, user_type, department__department_name, user__username }, index) =>
+                                <Box extraClass="box-padding" key={index}>
+                                    <Link to={`/user/${user__username}`}>
+                                        <h2>{`${first_name} ${last_name}`}</h2>
+                                    </Link>
+                                    <p className="vertical-flexbox">
+                                        <BsFillPersonLinesFill className="list-items" />
+                                        {user_type}
+                                    </p>
+                                    <p className="vertical-flexbox">
+                                        <BsBuilding className="list-items" />
+                                        {department__department_name}
+                                    </p>
+                                    <Button extraClass={`button-green ${this.state.btnName[index] === 'Remove' ? '' : 'display-none'}`}
+                                        buttonClick={this.handleConfirmButton}
+                                        idKey={index}>Confirm</Button>
+                                    <Button extraClass="button-red"
+                                        buttonClick={this.handleRemoveButton}
+                                        idKey={`b${index}`}>{this.state.btnName[index]}</Button>
+                                </Box>
+                            )}
+                        </GridBox>
+                    ) :
+                        <h2 style={{
+                            fontWeight: 'normal',
+                            marginTop: '-15px',
+                            color: '#666666'
+                        }}>You have no connection request right now.</h2>}
                 </Box>
                 <Box extraClass="main-box">
                     <h1>People You May Know</h1>

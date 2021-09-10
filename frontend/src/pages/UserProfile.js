@@ -79,7 +79,7 @@ function UserProfile({ match }) {
 
     const handleConnectionClick = (e) => {
         e.preventDefault()
-        
+
         const token = window.localStorage['token']
         const config = {
             headers: {
@@ -89,42 +89,41 @@ function UserProfile({ match }) {
         }
 
         const postData = async () => {
-            // if (connectionStatus === 'Connected') {
-            //     const response = await axios.post(`${API_URL}/connect`, {
-                    
-            //     }, config)
-            console.log('Okay')
-            if (connectionStatus === 'Not Connected') {
-                const response = await axios.post(`${API_URL}/connect`, {
-                    username: username,
-                    type: 'connect'
-                }, config)
-                if (response.data.status === 'requested') {
-                    setConnectionStatus('Requested')
-                    setConnectionStatusButton('Cancel Request')
-                    setSelfRequested(true)
+            try {
+                if (connectionStatus === 'Not Connected') {
+                    const response = await axios.post(`${API_URL}/connect`, {
+                        username: username,
+                        type: 'connect'
+                    }, config)
+                    if (response.data.status === 'requested') {
+                        setConnectionStatus('Requested')
+                        setConnectionStatusButton('Cancel Request')
+                        setSelfRequested(true)
+                    }
+                } else if (connectionStatus === 'Requested' && !selfRequested) {
+                    const response = await axios.post(`${API_URL}/connect`, {
+                        username: username,
+                        type: 'accept'
+                    }, config)
+                    if (response.data.status === 'accepted') {
+                        setConnectionStatus('Connected')
+                        setConnectionStatusButton('Disconnect')
+                    }
+                } else {
+                    const response = await axios.post(`${API_URL}/connect`, {
+                        username: username,
+                        type: 'disconnect'
+                    }, config)
+                    if (response.data.status === 'disconnected') {
+                        setConnectionStatus('Not Connected')
+                        setConnectionStatusButton('Connect')
+                    }
                 }
-            } else if (connectionStatus === 'Requested' && !selfRequested) {
-                const response = await axios.post(`${API_URL}/connect`, {
-                    username: username,
-                    type: 'accept'
-                }, config)
-                if (response.data.status === 'accepted') {
-                    setConnectionStatus('Connected')
-                    setConnectionStatusButton('Disconnect')
-                }
-            } else {
-                const response = await axios.post(`${API_URL}/connect`, {
-                    username: username,
-                    type: 'disconnect'
-                }, config)
-                if (response.data.status === 'disconnected') {
-                    setConnectionStatus('Not Connected')
-                    setConnectionStatusButton('Connect')
-                }
+            } catch (error) {
+                console.error(error)
             }
         }
-        
+
         postData()
     }
 
@@ -165,7 +164,12 @@ function UserProfile({ match }) {
                                         {item.year}
                                     </p>
                                 </Box>
-                            ) : <div>No education information added yet.</div>
+                            ) :
+                            <h2 style={{
+                                fontWeight: 'normal',
+                                marginTop: '-5px',
+                                color: '#666666'
+                            }}>No education information added yet.</h2>
                         }
                     </GridBox>
                 </div>
@@ -185,7 +189,12 @@ function UserProfile({ match }) {
                                         {item.year}
                                     </p>
                                 </Box>
-                            ) : <div>No experience information added yet.</div>
+                            ) :
+                            <h2 style={{
+                                fontWeight: 'normal',
+                                marginTop: '-5px',
+                                color: '#666666'
+                            }}>No experience information added yet.</h2>
                         }
                     </GridBox>
                 </div>
