@@ -15,7 +15,7 @@ function ProfileEducation() {
 
     useEffect(() => {
         document.title = 'Edit Education | IUBConnect'
-        
+
         const token = window.localStorage['token']
         const config = {
             headers: {
@@ -93,48 +93,52 @@ function ProfileEducation() {
                 },
             }
 
-            state.forEach(async (item) => {
-                if (item.id === '') {
-                    try {
-                        const response = await axios.post(`${API_URL}/education`, {
-                            name: item.name,
-                            qual: item.qual,
-                            year: item.year
-                        }, config)
-                        console.log(response)
-                    } catch (error) {
-                        console.log(error)
+            const updateData = async () => {
+                state.forEach(async (item) => {
+                    if (item.id === '') {
+                        try {
+                            const response = await axios.post(`${API_URL}/education`, {
+                                name: item.name,
+                                qual: item.qual,
+                                year: item.year
+                            }, config)
+                            console.log(response)
+                        } catch (error) {
+                            console.log(error)
+                        }
+                    } else {
+                        try {
+                            const response = await axios.post(`${API_URL}/education`, {
+                                id: item.id,
+                                name: item.name,
+                                qual: item.qual,
+                                year: item.year
+                            }, config)
+                            console.log(response)
+                        } catch (error) {
+                            console.log(error)
+                        }
                     }
-                } else {
+                })
+
+                deletedState.forEach(async (item) => {
                     try {
                         const response = await axios.post(`${API_URL}/education`, {
                             id: item.id,
-                            name: item.name,
-                            qual: item.qual,
-                            year: item.year
+                            delete: 'd'
                         }, config)
                         console.log(response)
                     } catch (error) {
-                        console.log(error)
+                        console.error(error)
                     }
-                }
-            })
-
-            deletedState.forEach(async (item) => {
-                try {
-                    const response = await axios.post(`${API_URL}/education`, {
-                        id: item.id,
-                        delete: 'd'
-                    }, config)
-                    console.log(response)
-                } catch (error) {
-                    console.error(error)
-                }
-            })
+                })
+            }
+            
+            await updateData()
+            setRedirect(true)
         }
 
         postData()
-        setRedirect(true)
     }
 
     if (redirect)
