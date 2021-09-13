@@ -18,14 +18,14 @@ class Account(models.Model):
         User, related_name='account', on_delete=models.CASCADE)
     first_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50, null=True)
-    iub_id_number = models.CharField(max_length=7, null=True)
+    iub_id_number = models.CharField(max_length=15, null=True)
     date_of_birth = models.DateField(null=True)
     GENDER_OPTIONS = (
         ('Male', 'Male'),
         ('Female', 'Female'),
     )
     gender = models.CharField(max_length=6, choices=GENDER_OPTIONS)
-    phone = models.CharField(max_length=15)
+    phone = models.CharField(max_length=20)
     address = models.CharField(max_length=30, null=True)
     USER_TYPE_OPTIONS = (
         ('Student', 'Student'),
